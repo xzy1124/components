@@ -18,7 +18,7 @@ export enum ButtonType {
     Default = 'default'
 }
 // 定义接口
-interface ButtonProps {
+interface BaseButtonProps {
     btnType?: ButtonType;
     size?: ButtonSize;
     disabled?: boolean;
@@ -26,29 +26,35 @@ interface ButtonProps {
     href?: string;
     children: React.ReactNode;
 }
-
+// 现有的props属性都是固有属性，缺乏button和a的原生属性如onClick，
+type NativeButtonProps = BaseButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>
+type NativeLinkProps = BaseButtonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
+export type ButtonProps = Partial<NativeButtonProps & NativeLinkProps>
 const Button: React.FC<ButtonProps> = (props) => {
     const {
         btnType = ButtonType.Default,
         size,
         href,
         disabled = false,
-        children
+        children,
+        className,
+        ...restProps
     } = props
-    const classes = classNames('btn',{
+    const classes = classNames('btn',className, {
         [`btn-${btnType}`] : btnType,
         [`btn-${size}`] : size,
         'disabled': (btnType === ButtonType.Link) && disabled,
 })
 if(btnType === ButtonType.Link && href){
     return (
-        <a className={classes} href={href}>
+        <a  {...restProps} className={classes} href={href}>
             {children}
+           
         </a>
     )
 }else {
     return (
-        <button className={classes} disabled={disabled}>
+        <button  {...restProps} className={classes} disabled={disabled}>
             {children}
         </button>
     )

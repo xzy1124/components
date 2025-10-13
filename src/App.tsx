@@ -4,7 +4,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Button disabled={true}>默认default</Button>
+        <Button disabled={true}>禁用</Button>
+        <Button btnType={ButtonType.Default}>默认Default</Button>
         <Button btnType={ButtonType.Primary} size={ButtonSize.Large}>主要primary</Button>
         <Button btnType={ButtonType.Danger} size={ButtonSize.Large}>危险danger</Button>
         <Button btnType={ButtonType.Secondary} size={ButtonSize.Large}>次要secondary</Button>
@@ -14,7 +15,9 @@ function App() {
         <Button btnType={ButtonType.Light} size={ButtonSize.Small}>亮light</Button>
         <Button btnType={ButtonType.Dark} size={ButtonSize.Small}>暗dark</Button>
         <Button btnType={ButtonType.Link} href="https://reactjs.org">link button</Button>
-
+        <Button btnType={ButtonType.Link} disabled={true}>disabled link</Button>
+        <Button btnType={ButtonType.Primary} className='custom' onClick={(e) => {e.preventDefault(); alert(123)}}>原生Button</Button>
+        <Button btnType={ButtonType.Link} target='_blank' href="https://reactjs.org">原生link</Button>
       </header>
     </div>
   );
