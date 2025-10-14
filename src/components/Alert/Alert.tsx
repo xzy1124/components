@@ -9,7 +9,7 @@ export enum AlertType {
 
 interface AlertProps {
     title: string,
-    description: string,  // 修正拼写错误
+    description: string,  
     // 点击关闭触发的事件
     onClose: () => void,
     // 是否显示关闭按钮
@@ -19,11 +19,11 @@ interface AlertProps {
 }
 
 // 传的时候直接解构type和children，不需要再props中解构
-const Alert: React.FC<AlertProps> = ({ title, description, onClose, closable = true, type, children }) => {
+const Alert: React.FC<AlertProps> = ({ title, description, onClose, closable, type, children }) => {
     return (
         <div
             className={`alert alert-${type}`}
-            onClick={onClose}
+            // onClick={onClose}
             title={title}  // title 是合法的 HTML 属性，表示鼠标悬停时显示的提示
         >
             {title && <h4 className="alert-title">{title}</h4>}
