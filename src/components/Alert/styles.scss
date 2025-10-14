@@ -1,0 +1,90 @@
+// 引入变量
+
+// 基础Alert样式
+.alert {
+    position: relative;
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 4px;
+    background-color: $gray-100;
+    border: 1px solid $gray-200;
+    color: $gray-800;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    // 不同类型的Alert样式
+    &.alert-success {
+        @include alert-style(rgba($success, 0.1), rgba($success, 0.3), $success);
+    }
+
+    &.alert-default {
+        @include alert-style(rgba($info, 0.1), rgba($info, 0.3), $info);
+    }
+
+    &.alert-warning {
+        @include alert-style(rgba($warning, 0.1), rgba($warning, 0.3), $warning);
+    }
+
+    &.alert-danger {
+        @include alert-style(rgba($danger, 0.1), rgba($danger, 0.3), $danger);
+    }
+
+    // 标题样式
+    .alert-title {
+        margin: 0 0 8px 0;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        line-height: $line-height-base;
+    }
+
+    // 描述样式
+    .alert-description {
+        margin: 0 0 8px 0;
+        font-size: $font-size-base;
+        line-height: $line-height-base;
+        word-wrap: break-word;
+        flex: 1;
+    }
+
+    // 内容样式（children）
+    .alert-content {
+        margin: 0;
+        font-size: $font-size-base;
+        line-height: $line-height-base;
+    }
+
+    // 关闭按钮样式
+    .alert-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: transparent;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+        color: inherit;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+        padding: 0;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+
+        &:hover {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        &:focus {
+            // 完全移除焦点样式
+            outline: none;
+            // 或者自定义焦点样式（可选）
+            // background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}
