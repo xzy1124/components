@@ -33,9 +33,11 @@ const MenuItem: React.FC<MenuItemProps> = ({
         }
     }
     return (
-        <div className={menuItemClassName} style={style} onClick={handleClick}>
+        <li className={menuItemClassName} style={style} onClick={handleClick}>
             {children}
-        </div>
+        </li>
     )
 }
+// 为MenuItem组件添加displayName静态属性，用于标识其类型
+MenuItem.displayName = 'MenuItem'
 export default MenuItem

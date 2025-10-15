@@ -23,7 +23,7 @@ export const MenuContext = createContext<MenuContextProps>({itemIndex: 0})
 const Menu: React.FC<MenuProps> = ({
     index = 0,
     className,
-    mode = 'horizontal',
+    mode = 'vertical',
     style = {},
     onSelect,
     children,
@@ -31,7 +31,7 @@ const Menu: React.FC<MenuProps> = ({
     // 内部状态，记录当前选中的索引
     const [selectedIndex, setSelectedIndex] = useState(index)
     const menuClassName = classNames(
-        'menu',
+        'viking-menu',
         {
             'menu-horizontal': mode === 'horizontal',
             'menu-vertical': mode === 'vertical',
@@ -51,12 +51,27 @@ const Menu: React.FC<MenuProps> = ({
         itemIndex: selectedIndex ? selectedIndex : 0,
         onSelected: handleClick,
     }
+    // 定义一个render函数遍历子组件
+    const renderChild = () => {
+        return React.Children.map(children, (child, index) => {
+        // 这样我们可以拿到child上面的displayName,但是直接拿child.displayName,child类型不确定
+        const childElement = child as React.FunctionComponentElement<MenuProps>
+        const { displayName} = childElement.type
+        if(displayName === 'MenuItem'){
+            return React.cloneElement(childElement, {
+                index,
+            })
+        }else {
+            console.error("Menu组件的子元素必须是MenuItem组件")
+        }
+    })
+}
     return (
-        <div className={menuClassName} style={style}>
+        <ul className={menuClassName} style={style}>
             <MenuContext.Provider value={passedContext}>
-                {children}
+                {renderChild()}
             </MenuContext.Provider>
-        </div>
+        </ul>
     )
 }
 export default Menu

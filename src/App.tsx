@@ -24,14 +24,27 @@ const onHandleState = (type:AlertType) => {
     <div className="App">
       <header className="App-header">
         {/*渲染Menu组件 */}
-        <Menu index={0} onSelect={(index) => alert(index)}>
+        <Menu index={0} onSelect={(index) => alert(index)} mode="horizontal">
           <MenuItem index={0}>
             选项1
           </MenuItem>
+          {/* 看看原来报错不 */}
+          {/* <div>我也假装是Menu的子组件</div> */}
           <MenuItem index={1} disabled={true}>
             选项2
           </MenuItem>
           <MenuItem index={2}>
+            选项3
+          </MenuItem>
+        </Menu>
+        <Menu index={0} onSelect={(index) => alert(index)} mode="vertical">
+          <MenuItem>
+            选项1
+          </MenuItem>
+          <MenuItem disabled={true}>
+            选项2
+          </MenuItem>
+          <MenuItem>
             选项3
           </MenuItem>
         </Menu>
