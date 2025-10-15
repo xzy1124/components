@@ -24,14 +24,14 @@ const onHandleState = (type:AlertType) => {
     <div className="App">
       <header className="App-header">
         {/*渲染Menu组件 */}
-        <Menu>
-          <MenuItem>
+        <Menu index={0} onSelect={(index) => alert(index)}>
+          <MenuItem index={0}>
             选项1
           </MenuItem>
-          <MenuItem disabled={true}>
+          <MenuItem index={1} disabled={true}>
             选项2
           </MenuItem>
-          <MenuItem>
+          <MenuItem index={2}>
             选项3
           </MenuItem>
         </Menu>
