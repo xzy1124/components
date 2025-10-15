@@ -1,5 +1,7 @@
 import Button, {ButtonType, ButtonSize} from './components/Button/Button'
 import Alert, {AlertType} from './components/Alert/Alert'
+import Menu from './components/Menu/Menu'
+import MenuItem from './components/Menu/MenuItem'
 import {useState} from 'react'
 function App() {
 const [visible, setVisible] = useState({
@@ -21,6 +23,19 @@ const onHandleState = (type:AlertType) => {
   return (
     <div className="App">
       <header className="App-header">
+        {/*渲染Menu组件 */}
+        <Menu>
+          <MenuItem>
+            选项1
+          </MenuItem>
+          <MenuItem disabled={true}>
+            选项2
+          </MenuItem>
+          <MenuItem>
+            选项3
+          </MenuItem>
+        </Menu>
+        {/* 渲染Button组件 */}
         <Button disabled={true}>禁用</Button>
         <Button btnType={ButtonType.Default}>默认Default</Button>
         <Button btnType={ButtonType.Primary} size={ButtonSize.Large}>主要primary</Button>
