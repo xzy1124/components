@@ -3,6 +3,7 @@ import Alert, {AlertType} from './components/Alert/Alert'
 import Menu from './components/Menu/Menu'
 import MenuItem from './components/Menu/MenuItem'
 import {useState} from 'react'
+import SubMenu from './components/Menu/subMenu'
 function App() {
 const [visible, setVisible] = useState({
   //使用对象键值对，每个键对应一个AlertType，值为是否可见
@@ -25,15 +26,26 @@ const onHandleState = (type:AlertType) => {
       <header className="App-header">
         {/*渲染Menu组件 */}
         <Menu index={0} onSelect={(index) => alert(index)} mode="horizontal">
-          <MenuItem index={0}>
+          <MenuItem>
             选项1
           </MenuItem>
           {/* 看看原来报错不 */}
           {/* <div>我也假装是Menu的子组件</div> */}
-          <MenuItem index={1} disabled={true}>
+          <MenuItem disabled={true}>
             选项2
           </MenuItem>
-          <MenuItem index={2}>
+          <SubMenu title="dropdown">
+            <MenuItem>
+              dropdown1
+            </MenuItem>
+            <MenuItem>
+              dropdown2
+            </MenuItem>
+            <MenuItem>
+              dropdown3
+            </MenuItem>
+          </SubMenu>
+          <MenuItem>
             选项3
           </MenuItem>
         </Menu>
@@ -44,6 +56,17 @@ const onHandleState = (type:AlertType) => {
           <MenuItem disabled={true}>
             选项2
           </MenuItem>
+          <SubMenu title="dropdown">
+            <MenuItem>
+              dropdown1
+            </MenuItem>
+            <MenuItem>
+              dropdown2
+            </MenuItem>
+            <MenuItem>
+              dropdown3
+            </MenuItem>
+          </SubMenu>
           <MenuItem>
             选项3
           </MenuItem>

@@ -1,6 +1,7 @@
+// 菜单
 .viking-menu {
     display: flex;
-    flex-direction: row;
+    // flex-direction: row;
     flex-wrap: wrap;
     padding-left: 0;
     margin-bottom: 30px;
@@ -24,7 +25,52 @@
             border-bottom: $menu-item-active-border-width solid $menu-item-active-color;
         }
     }
+    // 子菜单，所以要写到菜单的后面，和上面的menu-item是并列的
+    .submenu-item {
+        position: relative;
+        // 子菜单标题
+        .submenu-title {
+                display: flex;
+                align-items: center;
+            }
+        // 子菜单面板以及子子菜单项
+        .viking-submenu {
+            list-style: none;
+            padding-left: 0;
+            white-space: nowrap;
+
+            .menu-item {
+                padding: $menu-item-padding-y $menu-item-padding-x;
+                cursor: pointer;
+                transition: $menu-transition;
+                color: $body-color;
+
+                &.is-active,
+                &:hover {
+                    color: $menu-item-active-color !important;
+                }
+            }
+        }
+    }
+    
+
 }
+.menu-horizontal {
+    >.menu-item {
+        border-bottom: $menu-item-active-border-width solid transparent;
+    }
+
+    .viking-submenu {
+        position: absolute;
+        background: $white;
+        z-index: 100;
+        top: calc(100% + 8px);
+        left: 0;
+        border: $menu-border-width solid $menu-border-color;
+        box-shadow: $submenu-box-shadow;
+    }
+}
+// 垂直菜单
 .menu-vertical {
     flex-direction: column;
     border-bottom: 0;
@@ -38,6 +84,7 @@
         }
     }
 }
+// 水平菜单
 .menu-horizontal {
     flex-direction: row;
 }

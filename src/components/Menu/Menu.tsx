@@ -57,7 +57,7 @@ const Menu: React.FC<MenuProps> = ({
         // 这样我们可以拿到child上面的displayName,但是直接拿child.displayName,child类型不确定
         const childElement = child as React.FunctionComponentElement<MenuProps>
         const { displayName} = childElement.type
-        if(displayName === 'MenuItem'){
+        if(displayName === 'MenuItem' || displayName === 'SubMenu'){
             return React.cloneElement(childElement, {
                 index,
             })
