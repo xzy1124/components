@@ -23,18 +23,33 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
         e.preventDefault()
         setIsOpen(!isOpen)
     }
+    // 现在我们通过拿到的mode来创建鼠标触发的时候根据水平就触发，垂直就不变
+    let timer: any
+    const handleMouse = (e:React.MouseEvent, toggle: boolean) => {
+        clearTimeout(timer)
+        e.preventDefault()
+        timer = setTimeout(() => {
+            setIsOpen(toggle)
+        }, 300)
+    }
+    // 什么时候触发根据mode来判断
+    const clickEvents = context.mode === 'vertical' ? {
+        onClick: handleClick
+    } : {}
+    const hoverEvent = context.mode === 'horizontal' ? {
+        onMouseEnter: (e: React.MouseEvent) => handleMouse(e, true),
+        onMouseLeave: (e: React.MouseEvent) => handleMouse(e, false),
+    }: {}
     // 因为subMenu下面本质上也是MenuItem，所以也采用孩子遍历
     const renderChild = () => {
         // 定义classname用来携带open-menu
         const klass = classNames('viking-submenu', {
             'open-menu': isOpen
         })
-        const childrenComponent = React.Children.map(children, (child, index) => {
+        const childrenComponent = React.Children.map(children, (child, i) => {
             const childElement = child as React.FunctionComponentElement<MenuItemProps>
             if(childElement.type.displayName === 'MenuItem'){
-                return React.cloneElement(childElement, {
-                    index
-                })
+                return childElement
             } else {
                 console.error("Menu组件的子元素必须是MenuItem组件")
             }
@@ -48,8 +63,8 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
     }
     return (
         // 使得这个可以下拉的子菜单的classname拥有submenu-item类名
-        <li key={index} className={classes}>
-            <div className='submenu-title' onClick={handleClick}>
+        <li key={index} className={classes} {...hoverEvent}>
+            <div className='submenu-title' {...clickEvents}>
                 {title}
             </div>
 

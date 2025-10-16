@@ -15,7 +15,9 @@ export interface MenuProps {
 // 要传递给子组件的上下文接口
 interface MenuContextProps {
     itemIndex: number,
-    onSelected?: SelectCallback
+    onSelected?: SelectCallback,
+    // 菜单的类型，水平还是垂直
+    mode?:MenuType
 }
 // 使用createContext把MenuContextProps传递给子组件
 export const MenuContext = createContext<MenuContextProps>({itemIndex: 0})
@@ -50,6 +52,7 @@ const Menu: React.FC<MenuProps> = ({
     const passedContext: MenuContextProps = {
         itemIndex: selectedIndex ? selectedIndex : 0,
         onSelected: handleClick,
+        mode: mode
     }
     // 定义一个render函数遍历子组件
     const renderChild = () => {
