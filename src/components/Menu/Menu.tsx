@@ -3,9 +3,9 @@ import classNames from 'classnames'
 //编写Menu的接口属性
 type MenuType = 'horizontal' | 'vertical'
 // 因为回调函数写了两次，这里用type
-type SelectCallback = (selectedIndex: number) => void
+type SelectCallback = (selectedIndex: string) => void
 export interface MenuProps {
-    index: number
+    index?: string
     className?: string
     mode?: MenuType
     style?: React.CSSProperties
@@ -14,16 +14,16 @@ export interface MenuProps {
 }
 // 要传递给子组件的上下文接口
 interface MenuContextProps {
-    itemIndex: number,
+    itemIndex: string,
     onSelected?: SelectCallback,
     // 菜单的类型，水平还是垂直
     mode?:MenuType
 }
 // 使用createContext把MenuContextProps传递给子组件
-export const MenuContext = createContext<MenuContextProps>({itemIndex: 0})
+export const MenuContext = createContext<MenuContextProps>({itemIndex: '0'})
 //编写Menu组件
 const Menu: React.FC<MenuProps> = ({
-    index = 0,
+    index = '0',
     className,
     mode = 'vertical',
     style = {},
@@ -40,7 +40,7 @@ const Menu: React.FC<MenuProps> = ({
         },
         className,
     )
-    const handleClick = (index:number) => {
+    const handleClick = (index: string) => {
         // 拿到了子组件点击的索引，放到内部状态中
         setSelectedIndex(index)
         // 如果父组件有传递选择回调函数，就调用它，
@@ -50,7 +50,7 @@ const Menu: React.FC<MenuProps> = ({
         }
     }
     const passedContext: MenuContextProps = {
-        itemIndex: selectedIndex ? selectedIndex : 0,
+        itemIndex: selectedIndex ? selectedIndex : '0',
         onSelected: handleClick,
         mode: mode
     }
@@ -62,7 +62,7 @@ const Menu: React.FC<MenuProps> = ({
         const { displayName} = childElement.type
         if(displayName === 'MenuItem' || displayName === 'SubMenu'){
             return React.cloneElement(childElement, {
-                index,
+                index: index.toString(),
             })
         }else {
             console.error("Menu组件的子元素必须是MenuItem组件")

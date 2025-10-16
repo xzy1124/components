@@ -3,14 +3,14 @@ import classNames from 'classnames'
 import { MenuContext } from './Menu'
 import { useContext } from 'react'
 export interface MenuItemProps {
-    index?: number
+    index?: string
     disabled?: boolean
     className?: string
     style?: React.CSSProperties
     children?: React.ReactNode
 }
 const MenuItem: React.FC<MenuItemProps> = ({
-    index = 0,
+    index = '0',
     disabled = false,
     className,
     style = {},
@@ -27,7 +27,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         className,
     )
     const handleClick = () => {
-        if(context.onSelected && !disabled){
+        if(context.onSelected && !disabled && (typeof index ==='string')){
             //点击我，我就把我的索引传递给父组件
             context.onSelected(index)
         }

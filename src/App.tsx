@@ -25,7 +25,7 @@ const onHandleState = (type:AlertType) => {
     <div className="App">
       <header className="App-header">
         {/*渲染Menu组件 */}
-        <Menu index={0} onSelect={(index) => alert(index)} mode="horizontal">
+        <Menu index={'0'} onSelect={(index) => alert(index)} mode="horizontal">
           <MenuItem>
             选项1
           </MenuItem>
@@ -49,7 +49,7 @@ const onHandleState = (type:AlertType) => {
             选项3
           </MenuItem>
         </Menu>
-        <Menu index={0} onSelect={(index) => alert(index)} mode="vertical">
+        <Menu index={'0'} onSelect={(index) => alert(index)} mode="vertical">
           <MenuItem>
             选项1
           </MenuItem>
