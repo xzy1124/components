@@ -49,7 +49,7 @@ const onHandleState = (type:AlertType) => {
             选项3
           </MenuItem>
         </Menu>
-        <Menu index={'0'} onSelect={(index) => alert(index)} mode="vertical">
+        <Menu index={'0'} onSelect={(index) => alert(index)} mode="vertical" defaultOpenSubMenus={['2']}>
           <MenuItem>
             选项1
           </MenuItem>

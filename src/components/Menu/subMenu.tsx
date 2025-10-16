@@ -17,7 +17,12 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
         'is-active': context.itemIndex === index,
     })
     // 定义状态决定要不要显示下拉框
-    const [isOpen, setIsOpen] = useState(false)
+    // 这里的状态要根据垂直状态下适配一下
+    const isDefaultOpend = context.defaultOpenSubMenus as Array<string>
+    // 这里判断一下是否默认展开,如果是垂直状态下，默认展开的子菜单索引包含当前子菜单索引，就默认展开
+    const open = (index && context.mode === 'vertical') ? isDefaultOpend.includes(index) : false
+    const [isOpen, setIsOpen] = useState(open)
+
     // 定义回调函数，点击时触发
     const handleClick = (e: React.MouseEvent) => {
         e.preventDefault()

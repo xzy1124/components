@@ -11,6 +11,9 @@ export interface MenuProps {
     style?: React.CSSProperties
     onSelect?: SelectCallback
     children?: React.ReactNode
+    // 传递垂直状态下默认展开的属性
+    // 为什么这里是字符串数组，因为子菜单的索引是字符串,你要知道展开的是哪一项子菜单吧，这个是要靠App组件传递的
+    defaultOpenSubMenus?: string[]
 }
 // 要传递给子组件的上下文接口
 interface MenuContextProps {
@@ -18,6 +21,8 @@ interface MenuContextProps {
     onSelected?: SelectCallback,
     // 菜单的类型，水平还是垂直
     mode?:MenuType
+    // 垂直状态下默认展开的子菜单索引
+    defaultOpenSubMenus?: string[]
 }
 // 使用createContext把MenuContextProps传递给子组件
 export const MenuContext = createContext<MenuContextProps>({itemIndex: '0'})
@@ -29,6 +34,7 @@ const Menu: React.FC<MenuProps> = ({
     style = {},
     onSelect,
     children,
+    defaultOpenSubMenus = [],
 }) => {
     // 内部状态，记录当前选中的索引
     const [selectedIndex, setSelectedIndex] = useState(index)
@@ -52,7 +58,8 @@ const Menu: React.FC<MenuProps> = ({
     const passedContext: MenuContextProps = {
         itemIndex: selectedIndex ? selectedIndex : '0',
         onSelected: handleClick,
-        mode: mode
+        mode,
+        defaultOpenSubMenus,
     }
     // 定义一个render函数遍历子组件
     const renderChild = () => {
