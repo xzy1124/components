@@ -45,7 +45,8 @@
         }
         // 子菜单面板以及子子菜单项
         .viking-submenu {
-            display: none;
+            // 已经不需要一开始隐藏了，因为cssTransition会动态添加和移除节点
+            // display: none;
             list-style: none;
             padding-left: 0;
             white-space: nowrap;
@@ -62,9 +63,9 @@
                 }
             }
         }
-        .viking-submenu.open-menu {
-            display: block;
-        }
+        // .viking-submenu.open-menu {
+        //     display: block;
+        // }
     }
     .is-vertical {
         .arrow-icon {

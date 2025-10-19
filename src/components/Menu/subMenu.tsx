@@ -73,6 +73,7 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
                 timeout={300}
                 classNames="zoom-in-top"
                 appear
+                unmountOnExit
             >
                 <ul className={klass}>
                 {/* 这里出来的是一个一个的MenuItem组件 */}
