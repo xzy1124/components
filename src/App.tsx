@@ -34,7 +34,7 @@ const onHandleState = (type:AlertType) => {
         {/* 渲染FontAwesomeIcon组件 */}
         {/* <FontAwesomeIcon icon={faCoffee} size='5x'/> */}
         {/* 渲染我们二次封装的我们自己的Icon组件 */}
-        <Icon theme="danger" icon="arrow-down" size='5x'/>
+        <Icon theme="primary" icon="arrow-down" size='5x'/>
         {/*渲染Menu组件 */}
         <Menu index={'0'} onSelect={(index) => alert(index)} mode="horizontal">
           <MenuItem>
