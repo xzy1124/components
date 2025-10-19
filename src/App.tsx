@@ -2,8 +2,15 @@ import Button, {ButtonType, ButtonSize} from './components/Button/Button'
 import Alert, {AlertType} from './components/Alert/Alert'
 import Menu from './components/Menu/Menu'
 import MenuItem from './components/Menu/MenuItem'
+import Icon from './components/Icon/icon'
 import {useState} from 'react'
 import SubMenu from './components/Menu/subMenu'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas)
+
+
 function App() {
 const [visible, setVisible] = useState({
   //使用对象键值对，每个键对应一个AlertType，值为是否可见
@@ -24,6 +31,10 @@ const onHandleState = (type:AlertType) => {
   return (
     <div className="App">
       <header className="App-header">
+        {/* 渲染FontAwesomeIcon组件 */}
+        {/* <FontAwesomeIcon icon={faCoffee} size='5x'/> */}
+        {/* 渲染我们二次封装的我们自己的Icon组件 */}
+        <Icon theme="danger" icon="arrow-down" size='5x'/>
         {/*渲染Menu组件 */}
         <Menu index={'0'} onSelect={(index) => alert(index)} mode="horizontal">
           <MenuItem>
