@@ -125,41 +125,46 @@ const [show, setShow] = useState(false)
         <Button btnType={'link'} target='_blank' href="https://reactjs.org">原生link</Button>
       </header>
       {/* 这个组件的状态是visible，它是一个对象，每个键对应一个AlertType，值为是否可见 */}
-      {visible[AlertType.Success] && (
-        <Alert
-          type={AlertType.Success}
-          title='成功'
-          description='这是一个成功的提示'
-          // 点击关闭按钮时，调用onHandleState函数，将该AlertType的可见性设为false,其他的属性保持不变
-          onClose={() => onHandleState(AlertType.Success)}
-          // 我觉得也可以直接设置onClose的逻辑
-          closable={true}  // 显示关闭按钮
+      {/* 把Alert组件用Transition包裹起来，实现动画效果 */}
+      <Transition
+        in={visible[AlertType.Success]}
+        timeout={400}
+        animation={'zoom-in-top'}
+      >
+          <Alert
+            type={AlertType.Success}
+            title='成功'
+            description='这是一个成功的提示'
+            // 点击关闭按钮时，调用onHandleState函数，将该AlertType的可见性设为false,其他的属性保持不变
+            onClose={() => onHandleState(AlertType.Success)}
+            // 我觉得也可以直接设置onClose的逻辑
+            closable={true}  // 显示关闭按钮
           >
-            
-          成功
-        </Alert>
-      )}
 
+            成功
+          </Alert>
+      </Transition>
+      
+      {/* visible就是后面Alert渲染的前提，两者之间是&&连接符，所以visiable(false)的时候后面组件直接没了，都来不及动画 */}
       {visible[AlertType.Default] && (
         <Alert
           type={AlertType.Default}
-          title='信息'
-          description='这是一个信息的提示'
+          title='默认'
+          description='这是一个默认的提示'
           onClose={() => onHandleState(AlertType.Default)}
           closable={true}  // 显示关闭按钮
           >
-          信息
+          默认
         </Alert>
       )}
-
       {visible[AlertType.Warning] && (
         <Alert
           type={AlertType.Warning}
           title='警告'
           description='这是一个警告的提示'
           onClose={() => onHandleState(AlertType.Warning)}
-          closable={false}  // 显示关闭按钮
-          >
+          closable={true}  // 显示关闭按钮
+        >
           警告
         </Alert>
       )}
