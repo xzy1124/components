@@ -6,6 +6,7 @@ import Icon from './components/Icon/icon'
 import {useState} from 'react'
 import SubMenu from './components/Menu/subMenu'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import Transition from './components/Transition/transition'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 library.add(fas)
@@ -28,6 +29,8 @@ const onHandleState = (type:AlertType) => {
     [type]: false
   }))
 }
+// 添加点击状态确定是否展示动画
+const [show, setShow] = useState(false)
   return (
     <div className="App">
       <header className="App-header">
@@ -35,6 +38,29 @@ const onHandleState = (type:AlertType) => {
         {/* <FontAwesomeIcon icon={faCoffee} size='5x'/> */}
         {/* 渲染我们二次封装的我们自己的Icon组件 */}
         <Icon theme="primary" icon="arrow-down" size='5x'/>
+        {/* 使用我们的Transition */}
+        <Button size='lg' btnType='primary' onClick={() => setShow(!show)}>Toggle</Button>
+        <Transition
+          in={show}
+          timeout={300}
+          animation={'zoom-in-top'}
+        >
+          <div>
+            <p>Edit <code>src/App.tsx</code> and save to reload</p>
+            <p>Edit <code>src/App.tsx</code> and save to reload</p>
+            <p>Edit <code>src/App.tsx</code> and save to reload</p>
+            <p>Edit <code>src/App.tsx</code> and save to reload</p>
+          </div>
+        </Transition>
+        {/* 再来一个动画Button的测试 */}
+        <Transition
+          in={show}
+          timeout={300}
+          animation={'zoom-in-top'}
+          wrapper={true}
+        >
+          <Button size='lg'>Toggle</Button>
+        </Transition>
         {/*渲染Menu组件 */}
         <Menu index={'0'} onSelect={(index) => alert(index)} mode="horizontal">
           <MenuItem>
@@ -84,19 +110,19 @@ const onHandleState = (type:AlertType) => {
         </Menu>
         {/* 渲染Button组件 */}
         <Button disabled={true}>禁用</Button>
-        <Button btnType={ButtonType.Default}>默认Default</Button>
-        <Button btnType={ButtonType.Primary} size={ButtonSize.Large}>主要primary</Button>
-        <Button btnType={ButtonType.Danger} size={ButtonSize.Large}>危险danger</Button>
-        <Button btnType={ButtonType.Secondary} size={ButtonSize.Large}>次要secondary</Button>
+        <Button btnType={'default'}>默认Default</Button>
+        <Button btnType={'primary'} size={'lg'}>主要primary</Button>
+        <Button btnType={'danger'} size={'lg'}>危险danger</Button>
+        {/* <Button btnType={ButtonType.Secondary} size={ButtonSize.Large}>次要secondary</Button>
         <Button btnType={ButtonType.Success} size={ButtonSize.Large}>成功success</Button>
         <Button btnType={ButtonType.Warning} size={ButtonSize.Small}>警告warning</Button>
         <Button btnType={ButtonType.Info} size={ButtonSize.Small}>信息info</Button>
         <Button btnType={ButtonType.Light} size={ButtonSize.Small}>亮light</Button>
-        <Button btnType={ButtonType.Dark} size={ButtonSize.Small}>暗dark</Button>
-        <Button btnType={ButtonType.Link} href="https://reactjs.org">link button</Button>
-        <Button btnType={ButtonType.Link} disabled={true}>disabled link</Button>
-        <Button btnType={ButtonType.Primary} className='custom' onClick={(e) => {e.preventDefault(); alert(123)}}>原生Button</Button>
-        <Button btnType={ButtonType.Link} target='_blank' href="https://reactjs.org">原生link</Button>
+        <Button btnType={ButtonType.Dark} size={ButtonSize.Small}>暗dark</Button> */}
+        <Button btnType={'link'} href="https://reactjs.org">link button</Button>
+        <Button btnType={'link'} disabled={true}>disabled link</Button>
+        <Button btnType={'primary'} className='custom' onClick={(e) => {e.preventDefault(); alert(123)}}>原生Button</Button>
+        <Button btnType={'link'} target='_blank' href="https://reactjs.org">原生link</Button>
       </header>
       {/* 这个组件的状态是visible，它是一个对象，每个键对应一个AlertType，值为是否可见 */}
       {visible[AlertType.Success] && (

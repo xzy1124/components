@@ -1,22 +1,20 @@
 import classNames from 'classnames';
 import React from 'react';
 // 设计按钮组件
-export enum ButtonSize {
-    Large = 'lg',
-    Small = 'sm'
-}
-export enum ButtonType {
-    Primary = 'primary',
-    Secondary = 'secondary',
-    Success = 'success',
-    Danger = 'danger',
-    Warning = 'warning',
-    Info = 'info',
-    Light = 'light',
-    Dark = 'dark',
-    Link = 'link',
-    Default = 'default'
-}
+export type ButtonSize = 'lg' | 'sm'
+export type ButtonType = 'primary' | 'default' | 'danger' | 'link'
+// export enum ButtonType {
+//     Primary = 'primary',
+//     Secondary = 'secondary',
+//     Success = 'success',
+//     Danger = 'danger',
+//     Warning = 'warning',
+//     Info = 'info',
+//     Light = 'light',
+//     Dark = 'dark',
+//     Link = 'link',
+//     Default = 'default'
+// }
 // 定义接口
 interface BaseButtonProps {
     btnType?: ButtonType;
@@ -32,7 +30,7 @@ type NativeLinkProps = BaseButtonProps & React.AnchorHTMLAttributes<HTMLAnchorEl
 export type ButtonProps = Partial<NativeButtonProps & NativeLinkProps>
 const Button: React.FC<ButtonProps> = (props) => {
     const {
-        btnType = ButtonType.Default,
+        btnType = 'default',
         size,
         href,
         disabled = false,
@@ -43,9 +41,9 @@ const Button: React.FC<ButtonProps> = (props) => {
     const classes = classNames('btn',className, {
         [`btn-${btnType}`] : btnType,
         [`btn-${size}`] : size,
-        'disabled': (btnType === ButtonType.Link) && disabled,
+        'disabled': (btnType === 'link') && disabled,
 })
-if(btnType === ButtonType.Link && href){
+if(btnType === 'link' && href){
     return (
         <a  {...restProps} className={classes} href={href}>
             {children}

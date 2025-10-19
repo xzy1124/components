@@ -6,8 +6,8 @@ const defaultProps = {
     onClick: jest.fn()
 }
 const testProps : ButtonProps = {
-    btnType: ButtonType.Primary,
-    size: ButtonSize.Large,
+    btnType: 'primary',
+    size: 'lg',
     className: 'klass'
 }
 const disableProps: ButtonProps = {
@@ -46,7 +46,7 @@ describe('test Button component', () => {
         expect(element).toHaveClass('btn-primary btn-lg klass')
     })
     it('should render a link when btnType equails link and href is provided', () => {
-        render(<Button btnType={ButtonType.Link} href="dummyurl">Link</Button>)
+        render(<Button btnType={'link'} href="dummyurl">Link</Button>)
         const element = screen.getByText('Link')
         expect(element).toBeInTheDocument()
         expect(element.tagName).toEqual('A')
