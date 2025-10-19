@@ -33,6 +33,16 @@
             display: flex;
             align-items: center;
         }
+        .arrow-icon {
+            margin-left: 5px;
+            // 谁实现动画效果就添加谁transition，不能给上级因为不能继承
+            transition: transform .25s ease-in-out;
+        }
+        &:hover {
+            .arrow-icon {
+                transform: rotate(180deg);
+            }
+        }
         // 子菜单面板以及子子菜单项
         .viking-submenu {
             display: none;
@@ -54,6 +64,16 @@
         }
         .viking-submenu.open-menu {
             display: block;
+        }
+    }
+    .is-vertical {
+        .arrow-icon {
+            transform: rotate(0deg) !important;
+        }
+    }
+    .is-vertical.is-opend {
+        .arrow-icon {
+            transform: rotate(180deg) !important;
         }
     }
 }

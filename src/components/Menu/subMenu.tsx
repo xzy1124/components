@@ -3,6 +3,7 @@ import classNames from 'classnames'
 import {useContext, useState} from 'react'
 import { MenuContext } from './Menu'
 import { MenuItemProps } from './MenuItem'
+import Icon from '../Icon/icon'
 export interface SubMenuProps {
     index?: string
     title?: string
@@ -13,15 +14,18 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
     const context = useContext(MenuContext)
     const { index, title, className, children } = props
     // 构建classnames
-    const classes = classNames('menu-item submenu-item', className, {
-        'is-active': context.itemIndex === index,
-    })
     // 定义状态决定要不要显示下拉框
     // 这里的状态要根据垂直状态下适配一下
     const isDefaultOpend = context.defaultOpenSubMenus as Array<string>
     // 这里判断一下是否默认展开,如果是垂直状态下，默认展开的子菜单索引包含当前子菜单索引，就默认展开
     const open = (index && context.mode === 'vertical') ? isDefaultOpend.includes(index) : false
     const [isOpen, setIsOpen] = useState(open)
+    const classes = classNames('menu-item submenu-item', className, {
+        'is-active': context.itemIndex === index,
+        // 要处理垂直状态下的角标
+        'is-opend': isOpen,
+        'is-vertical': context.mode === 'vertical'
+    })
 
     // 定义回调函数，点击时触发
     const handleClick = (e: React.MouseEvent) => {
@@ -50,6 +54,7 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
         // 定义classname用来携带open-menu
         const klass = classNames('viking-submenu', {
             'open-menu': isOpen
+            
         })
         const childrenComponent = React.Children.map(children, (child, i) => {
             const childElement = child as React.FunctionComponentElement<MenuItemProps>
@@ -73,6 +78,7 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
         <li key={index} className={classes} {...hoverEvent}>
             <div className='submenu-title' {...clickEvents}>
                 {title}
+                <Icon icon="angle-down" className='arrow-icon'/>
             </div>
 
             {renderChild()}
