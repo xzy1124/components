@@ -7,10 +7,10 @@
 // mixin
 @import "mixin";
 
-// // animation
-// @import "animation";
-// button
+// animation
+@import "./animate.scss";
 
+// button
 @import "../components/Button/styles.scss";
 
 //Alert

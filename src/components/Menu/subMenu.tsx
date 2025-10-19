@@ -4,6 +4,7 @@ import {useContext, useState} from 'react'
 import { MenuContext } from './Menu'
 import { MenuItemProps } from './MenuItem'
 import Icon from '../Icon/icon'
+import { CSSTransition } from 'react-transition-group'
 export interface SubMenuProps {
     index?: string
     title?: string
@@ -67,10 +68,17 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
             }
         })
         return (
-            <ul className={klass}>
-               {/* 这里出来的是一个一个的MenuItem组件 */}
-                {childrenComponent}
-            </ul>
+            <CSSTransition
+                in={isOpen}
+                timeout={300}
+                classNames="zoom-in-top"
+                appear
+            >
+                <ul className={klass}>
+                {/* 这里出来的是一个一个的MenuItem组件 */}
+                    {childrenComponent}
+                </ul>
+            </CSSTransition>
         )
     }
     return (
