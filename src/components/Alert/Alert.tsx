@@ -1,12 +1,11 @@
 import React from 'react'
 import Icon from '../Icon/icon'
 // 设计警告组件，用于显示成功、信息、警告、危险等不同类型的提示信息
-export enum AlertType {
-    Success = 'success',
-    Default = 'default',
-    Warning = 'warning',
-    Danger = 'danger'
-}
+export type AlertType = 
+    | 'success'
+    | 'default'
+    | 'warning'
+    | 'danger'
 
 interface AlertProps {
     title: string,
@@ -38,7 +37,7 @@ const Alert: React.FC<AlertProps> = ({ title, description, onClose, closable, ty
                         onClose();
                     }}
                 >
-                    <Icon theme="primary" icon="close" size="1x" />
+                    <Icon theme="primary" icon="times" size="1x" />
                 </button>
             )}
         </div>

@@ -15,10 +15,10 @@ library.add(fas)
 function App() {
 const [visible, setVisible] = useState({
   //使用对象键值对，每个键对应一个AlertType，值为是否可见
-  [AlertType.Success]: true,
-  [AlertType.Default]: true,
-  [AlertType.Warning]: true,
-  [AlertType.Danger]: true,
+  ['success']: true,
+  ['default']: true,
+  ['warning']: true,
+  ['danger']: true,
 })
 // type是参数prams,后面AlertType是它的类型
   // 是React中useState hook的函数式更新方式。
@@ -127,16 +127,16 @@ const [show, setShow] = useState(false)
       {/* 这个组件的状态是visible，它是一个对象，每个键对应一个AlertType，值为是否可见 */}
       {/* 把Alert组件用Transition包裹起来，实现动画效果 */}
       <Transition
-        in={visible[AlertType.Success]}
+        in={visible['success']}
         timeout={400}
         animation={'zoom-in-top'}
       >
           <Alert
-            type={AlertType.Success}
+            type={'success'}
             title='成功'
             description='这是一个成功的提示'
             // 点击关闭按钮时，调用onHandleState函数，将该AlertType的可见性设为false,其他的属性保持不变
-            onClose={() => onHandleState(AlertType.Success)}
+          onClose={() => onHandleState('success')}
             // 我觉得也可以直接设置onClose的逻辑
             closable={true}  // 显示关闭按钮
           >
@@ -146,35 +146,37 @@ const [show, setShow] = useState(false)
       </Transition>
       
       {/* visible就是后面Alert渲染的前提，两者之间是&&连接符，所以visiable(false)的时候后面组件直接没了，都来不及动画 */}
-      {visible[AlertType.Default] && (
+      {visible['default'] && (
         <Alert
-          type={AlertType.Default}
+          type={'default'}
           title='默认'
           description='这是一个默认的提示'
-          onClose={() => onHandleState(AlertType.Default)}
+          onClose={() => onHandleState('default')}
           closable={true}  // 显示关闭按钮
           >
           默认
         </Alert>
       )}
-      {visible[AlertType.Warning] && (
+      {visible['warning'] && (
         <Alert
-          type={AlertType.Warning}
+          type={'warning'}
           title='警告'
           description='这是一个警告的提示'
-          onClose={() => onHandleState(AlertType.Warning)}
+          onClose={() => onHandleState('warning')}
           closable={true}  // 显示关闭按钮
         >
           警告
         </Alert>
       )}
 
-      {visible[AlertType.Danger] && (
+      {visible['danger'] && (
         <Alert
-          type={AlertType.Danger}
+          type={'danger'}
           title='危险'
           description='这是一个危险的提示'
-          onClose={() => onHandleState(AlertType.Danger)}>
+          onClose={() => onHandleState('danger')}
+          closable={true}  // 显示关闭按钮
+        >
           危险
         </Alert>
       )}

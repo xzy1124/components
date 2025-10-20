@@ -8,7 +8,7 @@ test('our first react alert case', () => {
     render(<Alert
         title="Test Title"
         description="Test Description"
-        type={AlertType.Success}
+        type={'success'}
         onClose={defaultProps.onClose}
     />)
     // 使用更精确的查询方式
@@ -30,7 +30,7 @@ describe('test Alert component', () => {
             title="Default Alert"
             description="This is a default alert"
             onClose={defaultProps.onClose}
-            type={AlertType.Default}
+            type={'default'}
             closable={false}
         />)
         const alertElement = screen.getByTitle('Default Alert')
@@ -45,7 +45,7 @@ describe('test Alert component', () => {
                 title="Success Alert"
                 description="This is a success alert"
                 onClose={defaultProps.onClose}
-                type={AlertType.Success}
+                type={'success'}
             />
         )
         let alertElement = screen.getByTitle('Success Alert')
@@ -57,7 +57,7 @@ describe('test Alert component', () => {
                 title="Warning Alert"
                 description="This is a warning alert"
                 onClose={defaultProps.onClose}
-                type={AlertType.Warning}
+                type={'warning'}
             />
         )
         alertElement = screen.getByTitle('Warning Alert')
@@ -69,7 +69,7 @@ describe('test Alert component', () => {
                 title="Danger Alert"
                 description="This is a danger alert"
                 onClose={defaultProps.onClose}
-                type={AlertType.Danger}
+                type={'danger'}
             />
         )
         alertElement = screen.getByTitle('Danger Alert')
@@ -80,7 +80,7 @@ describe('test Alert component', () => {
             title="Children Alert"
             onClose={defaultProps.onClose}
             description="This is children"
-            type={AlertType.Default}
+            type={'default'}
         >
             <div>
                 <p>Child 1</p>
@@ -101,7 +101,7 @@ describe('test Alert component', () => {
                 title="Closable Alert"
                 description="This alert can be closed"
                 onClose={defaultProps.onClose}
-                type={AlertType.Default}
+                type={'default'}
                 closable={true}
             />
         )
@@ -117,7 +117,7 @@ describe('test Alert component', () => {
                 title="Closable Alert"
                 description="Click the close button"
                 onClose={defaultProps.onClose}
-                type={AlertType.Default}
+                type={'default'}
                 closable={true}
             />
         )
@@ -134,7 +134,7 @@ describe('test Alert component', () => {
                 title="Non-closable Alert"
                 description="This alert cannot be closed"
                 onClose={defaultProps.onClose}
-                type={AlertType.Default}
+                type={'default'}
                 closable={false}
             />
         )
@@ -149,7 +149,7 @@ describe('test Alert component', () => {
                 title="Complete Alert"
                 description="This alert has both title and description"
                 onClose={defaultProps.onClose}
-                type={AlertType.Default}
+                type={'default'}
             >
                 And some children content
             </Alert>
