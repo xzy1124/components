@@ -1,13 +1,13 @@
 import React from 'react'
 import { CSSTransition } from 'react-transition-group'
 
-type AnimationName = 'zoom-in-top' | 'zoom-in-topleft' | 'zoom-in-right' | 'zoom-in-bottom'
+type AnimationName = 'zoom-in-top' | 'zoom-in-left' | 'zoom-in-right' | 'zoom-in-bottom'
 
 // 把 CSSTransition 的 children 类型剔除，自己用 ReactNode 定义，避免类型不兼容
 // 在这里，它从 CSSTransition 组件类型中提取出了其props类型定义
 type BaseCSSTransitionProps = Omit<React.ComponentProps<typeof CSSTransition>, 'children'>
 
-type TransitionProps = BaseCSSTransitionProps & {
+export type TransitionProps = BaseCSSTransitionProps & {
     // 允许任意ReactNode（字符串，数组，ReactElement等
     children?: React.ReactNode
     animation?: AnimationName
