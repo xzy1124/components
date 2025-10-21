@@ -1,62 +1,70 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
-import AutoComplete, { AutoCompleteProps } from './autoComplete';
+import AutoComplete from './autoComplete';
 import { DataSourceType } from './autoComplete';
+
 // 定义城市数据类型
 interface City {
     value: string;
     code: string;
     population: number;
 }
+
 const cityData: DataSourceType<City>[] = [
-        { value: '北京', code: 'BJ', population: 2154 },
-        { value: '上海', code: 'SH', population: 2424 },
-        { value: '广州', code: 'GZ', population: 1530 },
-        { value: '深圳', code: 'SZ', population: 1303 },
-        { value: '杭州', code: 'HZ', population: 949 },
-        { value: '南京', code: 'NJ', population: 844 },
-        { value: '成都', code: 'CD', population: 1633 },
-        { value: '武汉', code: 'WH', population: 1108 },
-    ];
-
-// 示例数据 - 编程语言对象数组
-interface ProgrammingLanguage {
-    value: string;
-    popularity: number;
-    type: string;
-}
-
-const languageData: DataSourceType<ProgrammingLanguage>[] = [
-    { value: 'JavaScript', popularity: 95, type: 'Frontend' },
-    { value: 'TypeScript', popularity: 80, type: 'Frontend' },
-    { value: 'Python', popularity: 85, type: 'Backend' },
-    { value: 'Java', popularity: 75, type: 'Backend' },
-    { value: 'C++', popularity: 65, type: 'System' },
-    { value: 'Go', popularity: 55, type: 'Backend' },
+    { value: '北京', code: 'BJ', population: 2154 },
+    { value: '上海', code: 'SH', population: 2424 },
+    { value: '广州', code: 'GZ', population: 1530 },
+    { value: '深圳', code: 'SZ', population: 1303 },
+    { value: '杭州', code: 'HZ', population: 949 },
+    { value: '南京', code: 'NJ', population: 844 },
+    { value: '成都', code: 'CD', population: 1633 },
+    { value: '武汉', code: 'WH', population: 1108 },
 ];
 
+// 定义GitHub用户类型
+interface GitHubUser {
+    value: string;
+    login: string;
+    avatar_url: string;
+    html_url: string;
+    score: number;
+}
+
+// 异步获取GitHub用户数据
+const fetchGitHubUsers = async (query: string): Promise<DataSourceType<GitHubUser>[]> => {
+    try {
+        // 使用GitHub Search API搜索用户
+        const response = await fetch(`https://api.github.com/search/users?q=${query}`);
+        const data = await response.json();
+
+        // 格式化数据为我们组件需要的格式
+        return data.items.slice(0, 10).map((item: any) => ({
+            value: item.login, // 这是显示在输入框中的值
+            ...item, // 展开其他属性
+        }));
+    } catch (error) {
+        console.error('获取GitHub用户数据失败:', error);
+        return [];
+    }
+};
 
 // 为Storybook定义组件元数据
-const AutoCompleteMeta: Meta<AutoCompleteProps> = {
+const AutoCompleteMeta: Meta<typeof AutoComplete> = {
     title: 'Component/AutoComplete',
     component: AutoComplete,
     argTypes: {
         onSelect: {
             action: 'selected'
         },
-        disabled: {
-            control: 'boolean',
-            description: '是否禁用自动补全'
-        }
     },
 };
 
 export default AutoCompleteMeta;
 
-// 重要: 这是关键修改，让故事类型也支持泛型
+// 定义泛型版本的Story类型
 interface AutoCompleteStory<T = {}> extends StoryObj<any> {
     args: {
         placeholder?: string;
-        fetchSuggestions: (value: string) => DataSourceType<T>[];
+        fetchSuggestions: (value: string) => DataSourceType<T>[] | Promise<DataSourceType<T>[]>;
         onSelect?: (item: DataSourceType<T>) => void;
         renderItem?: (item: DataSourceType<T>) => React.ReactElement;
         disabled?: boolean;
@@ -67,8 +75,6 @@ interface AutoCompleteStory<T = {}> extends StoryObj<any> {
 }
 
 // 基础自动补全故事
-// 这里指定泛型参数为City类型
-
 export const Default: AutoCompleteStory<City> = {
     args: {
         placeholder: '请输入城市名称',
@@ -90,21 +96,43 @@ export const Default: AutoCompleteStory<City> = {
         }
     }
 };
-// 自定义渲染项故事
-// 这里指定泛型参数为ProgrammingLanguage类型
-export const CustomRenderItems: AutoCompleteStory<ProgrammingLanguage> = {
+
+// GitHub用户搜索故事 - 异步请求示例
+export const GitHubUserSearch: AutoCompleteStory<GitHubUser> = {
     args: {
-        placeholder: '请输入编程语言',
-        fetchSuggestions: (value: string) => {
-            return languageData.filter(lang =>
-                lang.value.includes(value)
-            );
-        },
-        renderItem: (item) => (
-            <div>
-                <strong>{item.value}</strong>
-                <span> (人气: {item.popularity}%, 类型: {item.type})</span>
+        placeholder: '搜索GitHub用户（例如: microsoft, google）',
+        fetchSuggestions: fetchGitHubUsers,
+        renderItem: (item: DataSourceType<GitHubUser>) => (
+            <div style={{
+                padding: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                borderBottom: '1px solid #eee',
+                gap: '10px'
+            }}>
+                <img
+                    src={item.avatar_url}
+                    alt={item.login}
+                    style={{ width: '32px', height: '32px', borderRadius: '50%' }}
+                />
+                <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 'bold' }}>{item.login}</div>
+                    <div style={{ fontSize: '12px', color: '#666' }}>
+                        匹配度: {(item.score * 100).toFixed(2)}%
+                    </div>
+                </div>
             </div>
-        )
+        ),
+        onSelect: (item: DataSourceType<GitHubUser>) => {
+            console.log('选择了GitHub用户:', item);
+            // 实际项目中可以在这里处理用户选择后的逻辑
+        }
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: '使用GitHub API进行异步搜索的示例'
+            }
+        }
     }
-}
+};
