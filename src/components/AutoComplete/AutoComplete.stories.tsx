@@ -1,119 +1,82 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 import AutoComplete, { AutoCompleteProps } from './autoComplete';
-
-// 示例fetchSuggestions函数 - 城市列表
-const cityFetchSuggestions = (value: string): string[] => {
-    const cities = [
-        '北京', '上海', '广州', '深圳', '杭州',
-        '南京', '成都', '武汉', '西安', '重庆',
-        '天津', '苏州', '长沙', '青岛', '郑州'
+import { DataSourceType } from './autoComplete';
+// 定义城市数据类型
+interface City {
+    value: string;
+    code: string;
+    population: number;
+}
+const cityData: DataSourceType<City>[] = [
+        { value: '北京', code: 'BJ', population: 2154 },
+        { value: '上海', code: 'SH', population: 2424 },
+        { value: '广州', code: 'GZ', population: 1530 },
+        { value: '深圳', code: 'SZ', population: 1303 },
+        { value: '杭州', code: 'HZ', population: 949 },
+        { value: '南京', code: 'NJ', population: 844 },
+        { value: '成都', code: 'CD', population: 1633 },
+        { value: '武汉', code: 'WH', population: 1108 },
     ];
 
-    if (!value) return [];
+// 示例数据 - 编程语言对象数组
+interface ProgrammingLanguage {
+    value: string;
+    popularity: number;
+    type: string;
+}
 
-    return cities.filter(city =>
-        city.toLowerCase().includes(value.toLowerCase())
-    );
-};
+const languageData: DataSourceType<ProgrammingLanguage>[] = [
+    { value: 'JavaScript', popularity: 95, type: 'Frontend' },
+    { value: 'TypeScript', popularity: 80, type: 'Frontend' },
+    { value: 'Python', popularity: 85, type: 'Backend' },
+    { value: 'Java', popularity: 75, type: 'Backend' },
+    { value: 'C++', popularity: 65, type: 'System' },
+    { value: 'Go', popularity: 55, type: 'Backend' },
+];
 
-// 示例fetchSuggestions函数 - 编程语言
-const languageFetchSuggestions = (value: string): string[] => {
-    const languages = [
-        'JavaScript', 'TypeScript', 'Python', 'Java', 'C++',
-        'C#', 'Go', 'Rust', 'Swift', 'Kotlin',
-        'PHP', 'Ruby', 'SQL', 'HTML', 'CSS'
-    ];
-
-    if (!value) return [];
-
-    return languages.filter(lang =>
-        lang.toLowerCase().includes(value.toLowerCase())
-    );
-};
-
-// 异步示例fetchSuggestions函数
-const asyncFetchSuggestions = (value: string): string[] => {
-    // 注意：在实际Storybook中，我们返回模拟数据，而不是真实异步请求
-    // 实际项目中这里应该是异步函数，但为了Storybook演示我们使用同步模拟
-    const fruits = [
-        'Apple', 'Banana', 'Cherry', 'Date', 'Elderberry',
-        'Fig', 'Grape', 'Honeydew', 'Kiwi', 'Lemon'
-    ];
-
-    if (!value) return [];
-
-    return fruits.filter(fruit =>
-        fruit.toLowerCase().includes(value.toLowerCase())
-    );
-};
 
 // 为Storybook定义组件元数据
 const AutoCompleteMeta: Meta<AutoCompleteProps> = {
     title: 'Component/AutoComplete',
     component: AutoComplete,
     argTypes: {
-        fetchSuggestions: {
-            description: '获取建议列表的函数',
-            type: { name: 'function', required: true }
-        },
         onSelect: {
-            description: '选择建议项时的回调函数',
             action: 'selected'
-        },
-        placeholder: {
-            control: 'text',
-            description: '占位文本'
         },
         disabled: {
             control: 'boolean',
-            description: '是否禁用'
-        },
-        size: {
-            control: {
-                type: 'select',
-                options: ['lg', 'sm', undefined]
-            },
-            description: '输入框尺寸'
-        },
-        icon: {
-            control: 'text',
-            description: '输入框内的图标'
-        },
-        prepend: {
-            control: 'text',
-            description: '输入框前置内容'
-        },
-        append: {
-            control: 'text',
-            description: '输入框后置内容'
-        },
-        renderItem: {
-            description: '自定义渲染建议项的函数',
-            type: {
-                name: 'function',
-                required: false
-            }
+            description: '是否禁用自动补全'
         }
     },
-    parameters: {
-        docs: {
-            description: {
-                component: '自动补全输入组件，根据输入提供建议列表'
-            }
-        }
-    }
 };
 
 export default AutoCompleteMeta;
 
-// 使用StoryObj类型
-type AutoCompleteStory = StoryObj<AutoCompleteProps>;
+// 重要: 这是关键修改，让故事类型也支持泛型
+interface AutoCompleteStory<T = {}> extends StoryObj<any> {
+    args: {
+        placeholder?: string;
+        fetchSuggestions: (value: string) => DataSourceType<T>[];
+        onSelect?: (item: DataSourceType<T>) => void;
+        renderItem?: (item: DataSourceType<T>) => React.ReactElement;
+        disabled?: boolean;
+        size?: 'lg' | 'sm' | undefined;
+        prepend?: string;
+        append?: string;
+    };
+}
 
 // 基础自动补全故事
-export const Default: AutoCompleteStory = {
+// 这里指定泛型参数为City类型
+
+export const Default: AutoCompleteStory<City> = {
     args: {
         placeholder: '请输入城市名称',
-        fetchSuggestions: cityFetchSuggestions,
+        fetchSuggestions: (value: string) => {
+            return cityData.filter(city =>
+                city.value.includes(value)
+            );
+        },
         disabled: false,
         size: "lg",
         prepend: "我定义了",
@@ -126,16 +89,21 @@ export const Default: AutoCompleteStory = {
             }
         }
     }
-}; 
+};
 // 自定义渲染项故事
-export const CustomRenderItems: AutoCompleteStory = {
+// 这里指定泛型参数为ProgrammingLanguage类型
+export const CustomRenderItems: AutoCompleteStory<ProgrammingLanguage> = {
     args: {
         placeholder: '请输入编程语言',
-        fetchSuggestions: languageFetchSuggestions,
-        renderItem: (item: string) => (
+        fetchSuggestions: (value: string) => {
+            return languageData.filter(lang =>
+                lang.value.includes(value)
+            );
+        },
+        renderItem: (item) => (
             <div>
-                <span>{item}</span>
-                <small>({item.length} 个字符)</small>
+                <strong>{item.value}</strong>
+                <span> (人气: {item.popularity}%, 类型: {item.type})</span>
             </div>
         )
     }
