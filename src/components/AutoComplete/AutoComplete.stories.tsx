@@ -87,6 +87,13 @@ const AutoCompleteMeta: Meta<AutoCompleteProps> = {
             control: 'text',
             description: '输入框后置内容'
         },
+        renderItem: {
+            description: '自定义渲染建议项的函数',
+            type: {
+                name: 'function',
+                required: false
+            }
+        }
     },
     parameters: {
         docs: {
@@ -119,4 +126,17 @@ export const Default: AutoCompleteStory = {
             }
         }
     }
-};
+}; 
+// 自定义渲染项故事
+export const CustomRenderItems: AutoCompleteStory = {
+    args: {
+        placeholder: '请输入编程语言',
+        fetchSuggestions: languageFetchSuggestions,
+        renderItem: (item: string) => (
+            <div>
+                <span>{item}</span>
+                <small>({item.length} 个字符)</small>
+            </div>
+        )
+    }
+}

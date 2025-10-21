@@ -6,12 +6,15 @@ import { useState } from 'react'
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
     fetchSuggestions: (suggest: string) => string[]
     onSelect?:(item:string) => void
+    // 实现自定义模板渲染
+    renderItem?: (item: string) => React.ReactElement
 }
 export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
     const {
         fetchSuggestions,
         onSelect,
         value,
+        renderItem,
         ...restProps
     } = props
     // 第一,拿到处理输入框的值
@@ -37,12 +40,16 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
             onSelect(item)
         }
     }
+        // 自定义渲染项
+    const renderItemElement = (item: string) => {
+        return renderItem ? renderItem(item) : item
+    }
     const generateDropdown = () => {
         return (
             <ul>
                 {suggestions.map((item, index) => (
                     <li key={index} onClick={() => handleSelect(item)}>
-                        {item}
+                        {renderItemElement(item)}
                     </li>
                 ))}
             </ul>
