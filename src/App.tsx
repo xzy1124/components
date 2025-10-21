@@ -3,6 +3,7 @@ import Alert, {AlertType} from './components/Alert/Alert'
 import Menu from './components/Menu/Menu'
 import MenuItem from './components/Menu/MenuItem'
 import Icon from './components/Icon/icon'
+import Input from './components/Input/input'
 import {useState} from 'react'
 import SubMenu from './components/Menu/subMenu'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -15,10 +16,10 @@ library.add(fas)
 function App() {
 const [visible, setVisible] = useState({
   //使用对象键值对，每个键对应一个AlertType，值为是否可见
-  ['success']: true,
-  ['default']: true,
-  ['warning']: true,
-  ['danger']: true,
+  success: true,
+  default: true,
+  warning: true,
+  danger: true,
 })
 // type是参数prams,后面AlertType是它的类型
   // 是React中useState hook的函数式更新方式。
@@ -31,14 +32,45 @@ const onHandleState = (type:AlertType) => {
 }
 // 添加点击状态确定是否展示动画
 const [show, setShow] = useState(false)
+// 为输入框添加状态管理
+const [inputValue, setInputValue] = useState('')
+// 处理输入变化
+const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setInputValue(e.target.value)
+}
   return (
     <div className="App">
       <header className="App-header">
-        {/* 渲染FontAwesomeIcon组件 */}
+  {/* 渲染我们的Input组件 */}
+        {/* 1.基础输入框 */}
+        <Input  placeholder='请输入'/>
+        {/* 2.带有尺寸的输入框 */}
+        <Input size='lg' placeholder='请输入-lg'/>
+        <Input size='sm' placeholder='请输入-sm'/>
+        {/* 3.禁用状态的输入框 */}
+        <Input disabled={true} placeholder='禁用状态'/>
+        {/* 4.带有图标的输入框 */}
+        <Input icon="search" placeholder='搜索'/>
+        {/* 5.带有前后缀的输入框 */}
+        <Input prepend="$" append=".00" placeholder='金额'/> 
+        {/* 6.受控的输入框 */}
+        <Input value={inputValue} onChange={handleInputChange} placeholder='受控也就是带状态管理的输入框'/>
+        {/* 7.带有前置内容的输入框 */}
+        <Input prepend="https://" placeholder='请输入一个网址'/>
+        {/* 8.带有前置组件的输入框 */}
+        <Input prepend={<Icon icon="user"/> } placeholder='请输入用户名'/>
+        {/* 9.带有后置内容的输入框 */}
+        <Input append=".com" placeholder='请输入邮箱地址'/>
+        {/* 10.带有后置组件的输入框 */}
+        <Input append={<Icon icon="arrow-up"/> } placeholder='请输入密码'/>
+        {/* 11.组合使用 */}
+        <Input size="lg" icon="home" prepend="家庭:" placeholder='家庭地址'/>
+
+  {/* 渲染FontAwesomeIcon组件 */}
         {/* <FontAwesomeIcon icon={faCoffee} size='5x'/> */}
-        {/* 渲染我们二次封装的我们自己的Icon组件 */}
+  {/* 渲染我们二次封装的我们自己的Icon组件 */}
         <Icon theme="primary" icon="arrow-down" size='5x'/>
-        {/* 使用我们的Transition */}
+  {/* 使用我们的Transition */}
         <Button size='lg' btnType='primary' onClick={() => setShow(!show)}>Toggle</Button>
         <Transition
           in={show}
@@ -52,7 +84,7 @@ const [show, setShow] = useState(false)
             <p>Edit <code>src/App.tsx</code> and save to reload</p>
           </div>
         </Transition>
-        {/* 再来一个动画Button的测试 */}
+  {/* 再来一个动画Button的测试 */}
         <Transition
           in={show}
           timeout={300}
@@ -61,7 +93,7 @@ const [show, setShow] = useState(false)
         >
           <Button size='lg'>Toggle</Button>
         </Transition>
-        {/*渲染Menu组件 */}
+  {/*渲染Menu组件 */}
         <Menu index={'0'} onSelect={(index) => alert(index)} mode="horizontal">
           <MenuItem>
             选项1
@@ -108,7 +140,7 @@ const [show, setShow] = useState(false)
             选项3
           </MenuItem>
         </Menu>
-        {/* 渲染Button组件 */}
+  {/* 渲染Button组件 */}
         <Button disabled={true}>禁用</Button>
         <Button btnType={'default'}>默认Default</Button>
         <Button btnType={'primary'} size={'lg'}>主要primary</Button>
