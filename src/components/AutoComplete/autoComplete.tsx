@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Input, { InputProps } from '../Input/input'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Icon from '../Icon/icon'
 import useDebounce from '../../hooks/useDebounce'
 import classNames from 'classnames'
@@ -36,9 +36,12 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
     const [highlightIndex, setHighlightIndex] = useState(-1)
     // 把inputvalue用防抖函数处理一下
     const deBounceValue = useDebounce(inputvalue, 500)
+        // 使用useRef存储一个状态，不变的
+    const useRefObj = useRef(false)
     // 异步操作属于副作用，所以我们把他们放进useEffect
     useEffect(() => {
-        if (deBounceValue) {
+        // 只有当输入框的值改变,且useRefObj.current为false的时候,才去调用筛选函数
+        if (deBounceValue && !useRefObj.current) {
             const result = fetchSuggestions(deBounceValue)
             // 先判断一下是不是异步如果是异步,就等待异步完成,再设置suggestions,
             // 因为只要是异步操作,那就有then方法,所以我们可以用then方法来处理异步操作
@@ -62,6 +65,8 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
     const onHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.trim()
         setValue(value)
+        // 在输入框元素改变的时候把useRefObj.current设置为false
+        useRefObj.current = false
     }
     console.log(suggestions)
     const handleSelect = (item: DataSourceType) => {
@@ -71,6 +76,8 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
             // 调用父组件传入的onSelect回调函数
             onSelect(item)
         }
+        // 在选择某一项的时候把useRefObj.current设置为true
+        useRefObj.current = true
     }
     // 创建一个函数，处理高亮的索引，如果索引超出范围，就调整到边界
     const higtlight = (index: number) => {
