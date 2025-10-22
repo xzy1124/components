@@ -51,10 +51,46 @@ const fetchGitHubUsers = async (query: string): Promise<DataSourceType<GitHubUse
 const AutoCompleteMeta: Meta<typeof AutoComplete> = {
     title: 'Component/AutoComplete',
     component: AutoComplete,
+    tags: ['autodocs'],
     argTypes: {
+        // 回调函数 - 配置为可在UI中显示调用
         onSelect: {
-            action: 'selected'
+            action: 'selected',
+            description: '当用户选择一个选项时触发的回调函数'
         },
+        // 输入框占位符
+        placeholder: {
+            control: 'text',
+            description: '输入框的占位文本',
+            defaultValue: '请输入'
+        },
+        // 禁用状态
+        disabled: {
+            control: 'boolean',
+            description: '是否禁用组件',
+            defaultValue: false
+        },
+        // 尺寸大小
+        size: {
+            control: 'select',
+            options: ['lg', 'sm'],
+            description: '输入框的尺寸',
+            defaultValue: undefined
+        },
+        // 异步搜索函数
+        fetchSuggestions: {
+            description: '获取搜索建议的函数，支持同步和异步返回',
+            table: {
+                disable: true // 在表格视图中隐藏此属性
+            }
+        },
+        // 自定义渲染函数
+        renderItem: {
+            description: '自定义渲染每个选项的函数',
+            table: {
+                disable: true // 在表格视图中隐藏此属性
+            }
+        }
     },
 };
 
