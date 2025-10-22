@@ -104,7 +104,7 @@ interface AutoCompleteStory<T = {}> extends StoryObj<any> {
         onSelect?: (item: DataSourceType<T>) => void;
         renderItem?: (item: DataSourceType<T>) => React.ReactElement;
         disabled?: boolean;
-        size?: 'lg' | 'sm' | undefined;
+        size?: 'lg' | 'sm';
         prepend?: string;
         append?: string;
     };
