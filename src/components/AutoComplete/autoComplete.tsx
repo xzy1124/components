@@ -4,6 +4,7 @@ import { useState, useRef } from 'react'
 import Icon from '../Icon/icon'
 import useDebounce from '../../hooks/useDebounce'
 import classNames from 'classnames'
+import useClickOutside from '../../hooks/useClickOutside'
 // 做改进了,现在我们的筛选数据只能是字符串数组,那我还想是对象呢
 interface DataSourceObject {
     value: string
@@ -38,6 +39,12 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
     const deBounceValue = useDebounce(inputvalue, 500)
         // 使用useRef存储一个状态，不变的
     const useRefObj = useRef(false)
+        // 使用useRef操作整个大组件，当用户点击了其他地方,我们要把suggestions清空
+    const autoCompleteRef = useRef<HTMLDivElement>(null)
+        // 传进去一个绑定好的Dom元素，返回一个回调函数，就是把suggestions清空
+    useClickOutside(autoCompleteRef, () => {
+        setSuggestions([])
+    })
     // 异步操作属于副作用，所以我们把他们放进useEffect
     useEffect(() => {
         // 只有当输入框的值改变,且useRefObj.current为false的时候,才去调用筛选函数
@@ -137,7 +144,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
 
 
     return (
-        <div>
+        <div className='viking-auto-complete' ref={autoCompleteRef}>
             <Input
                 value={inputvalue}
                 onChange={onHandleChange}
