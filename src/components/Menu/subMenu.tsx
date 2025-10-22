@@ -1,10 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
-import {useContext, useState} from 'react'
+import {useContext, useState, useRef} from 'react'
 import { MenuContext } from './Menu'
 import { MenuItemProps } from './MenuItem'
 import Icon from '../Icon/icon'
-import { CSSTransition } from 'react-transition-group'
+import useClickOutside from '../../hooks/useClickOutside'
 import Transition from '../Transition/transition'
 export interface SubMenuProps {
     index?: string
@@ -15,6 +15,8 @@ export interface SubMenuProps {
 const SubMenu: React.FC<SubMenuProps> = (props) => {
     const context = useContext(MenuContext)
     const { index, title, className, children } = props
+        // 创建Dom钩子
+    const subMenuRef = useRef<HTMLUListElement>(null)
     // 构建classnames
     // 定义状态决定要不要显示下拉框
     // 这里的状态要根据垂直状态下适配一下
@@ -22,6 +24,13 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
     // 这里判断一下是否默认展开,如果是垂直状态下，默认展开的子菜单索引包含当前子菜单索引，就默认展开
     const open = (index && context.mode === 'vertical') ? isDefaultOpend.includes(index) : false
     const [isOpen, setIsOpen] = useState(open)
+    useClickOutside(subMenuRef, () => {
+        // 只有现在菜单是打开的才执行点击关闭操作，因为你没打开那我关什么
+        if(isOpen){
+            setIsOpen(false)
+        }
+    })
+
     const classes = classNames('menu-item submenu-item', className, {
         'is-active': context.itemIndex === index,
         // 要处理垂直状态下的角标
@@ -74,7 +83,7 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
                 timeout={300}
                 animation='zoom-in-top'
             >
-                <ul className={klass}>
+                <ul className={klass} ref={subMenuRef}>
                 {/* 这里出来的是一个一个的MenuItem组件 */}
                     {childrenComponent}
                 </ul>

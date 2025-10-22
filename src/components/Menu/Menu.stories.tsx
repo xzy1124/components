@@ -187,9 +187,16 @@ const handleSelect = (index: string) => {
 };
 
 // 带下拉子菜单的菜单
+
 export const WithSubMenu = () => {
+    const [selectedIndex, setSelectedIndex] = React.useState('0');
+
+    const handleSelect = (index: string) => {
+        setSelectedIndex(index);
+    };
+
     return (
-        <Menu mode="horizontal">
+        <Menu mode="horizontal" onSelect={handleSelect} index={selectedIndex}>
             <MenuItem>首页</MenuItem>
             <SubMenu title="产品">
                 <MenuItem>产品列表</MenuItem>
