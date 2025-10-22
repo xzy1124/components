@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Input, { InputProps } from '../Input/input'
 import { useState } from 'react'
 import Icon from '../Icon/icon'
+import useDebounce from '../../hooks/useDebounce'
 // 做改进了,现在我们的筛选数据只能是字符串数组,那我还想是对象呢
 interface DataSourceObject {
     value: string
@@ -25,19 +26,20 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
         ...restProps
     } = props
     // 第一,拿到处理输入框的值
-    const [inputvalue, setValue] = useState(value)
+    const [inputvalue, setValue] = useState(value as string)
     // 第二,拿到处理筛选之后的ui渲染
     const [suggestions, setSuggestions] = useState<DataSourceType[]>([])
     // 等待异步请求的状态
     const [loading, setLoading] = useState(false)
-    const onHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.trim()
-        setValue(value)
-        if (value) {
-            const result = fetchSuggestions(value)
+    // 把inputvalue用防抖函数处理一下
+    const deBounceValue = useDebounce(inputvalue, 500)
+    // 异步操作属于副作用，所以我们把他们放进useEffect
+    useEffect(() => {
+        if (deBounceValue) {
+            const result = fetchSuggestions(deBounceValue)
             // 先判断一下是不是异步如果是异步,就等待异步完成,再设置suggestions,
             // 因为只要是异步操作,那就有then方法,所以我们可以用then方法来处理异步操作
-            if(result instanceof Promise){
+            if (result instanceof Promise) {
                 // 异步请求开始
                 setLoading(true)
                 result.then(data => {
@@ -45,13 +47,17 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ((props) => {
                     // 异步请求结束
                     setLoading(false)
                 })
-            }else {
+            } else {
                 setSuggestions(result)
             }
-        }else {
+        } else {
             // 也就是没有输入
             setSuggestions([])
         }
+    }, [deBounceValue])
+    const onHandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.trim()
+        setValue(value)
     }
     console.log(suggestions)
     const handleSelect = (item: DataSourceType) => {
