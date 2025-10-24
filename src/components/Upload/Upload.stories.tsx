@@ -43,6 +43,19 @@ export default {
                 type: { summary: '(err: any, file: File) => void' },
             },
         },
+        beforeUpload: {
+            description: '上传前的钩子函数，返回false可以阻止上传；如果返回Promise，等待其resolve后再上传',
+            table: {
+                type: { summary: '(file: File) => boolean | Promise<File>' },
+            },
+        },
+        onChange: {
+            action: 'uploadChange',
+            description: '上传完成后调用的回调函数，用于通知父组件上传结果',
+            table: {
+                type: { summary: '(file: File) => void' },
+            },
+        },
     },
     args: {
         // 默认使用模拟API
@@ -138,3 +151,68 @@ export const WithCustomCallbacks: Story = {
         },
     },
 };
+// 添加文件大小验证的上传故事
+export const WithFileSizeValidation: Story = {
+    args: {
+        action: 'https://jsonplaceholder.typicode.com/posts',
+        // 实现成功
+        onSuccess:fn(),
+        // 实现失败
+        onError:fn(),
+        // 实现上传大小校验
+        beforeUpload: (file: File) => {
+            const maxSize = 50 * 1024
+            if (file.size > maxSize) {
+                alert('文件大小超过50KB，无法上传')
+                return false
+            }
+            return true
+        }
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: '使用beforeUpload，是直接在这里定义实现函数的，进行大小验证'
+            }
+        }
+    }
+}
+// 添加异步处理的上传故事
+export const WithAsyncBeforeUpload: Story = {
+    args: {
+        action: 'https://jsonplaceholder.typicode.com/posts',
+        onSuccess:fn(),
+        onError:fn(),
+        // 实现校验结果返回是异步对象的时候，可以在then中上传之前重命名文件
+        beforeUpload: (file: File) => {
+            const newFile = new File([file], 'ziyan_name.jpg', {type: file.type})
+            // 直接让promise使用resolve方法去处理，返回新的文件对象
+            return Promise.resolve(newFile)
+        }
+    },
+    parameters: {
+        docs: {
+            description: {
+                story: '使用beforeUpload，返回异步对象可以在then中处理，比如重命名文件'
+            }
+        }
+    }
+}
+// 测试onChange回调，也就是上传完成后我们父组件能知道，我们能拿到文件名称打印出来看看
+export const WithOnChangeTracking: Story = {
+    args:{
+        action: 'https://jsonplaceholder.typicode.com/posts',
+        onChange: fn((file) => {
+            console.log('上传完成:', file.name, file.size);
+        })
+    },
+    render: (args) => (
+        <>
+        {/* 这里渲染一个Upload组件 */}
+            <Upload {...args} />
+            <div style={{ marginTop: '20px' }}>
+                <h4>查看Actions面板或控制台，观察onChange调用情况</h4>
+            </div>
+        </>
+    ),   
+}
