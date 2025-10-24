@@ -5,7 +5,9 @@ import MenuItem from './components/Menu/MenuItem'
 import Icon from './components/Icon/icon'
 import Input from './components/Input/input'
 import {useState} from 'react'
+import axios from 'axios'
 import SubMenu from './components/Menu/subMenu'
+import Upload from './components/Upload/upload'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import Transition from './components/Transition/transition'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -38,9 +40,31 @@ const [inputValue, setInputValue] = useState('')
 const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setInputValue(e.target.value)
 }
+// 处理文件上传
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 拿到files属性的第一个文件，因为是数组，所以要取第一个
+    const file = e.target.files?.[0]
+    if(file){
+      console.log('上传的文件:', file)
+      const formData = new FormData()
+      // 把数据发送到formData里面
+      formData.append('file', file)
+      axios.post("https://jsonplaceholder.typicode.com/cc", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(res =>{
+        console.log('上传成功', res)
+      })
+    }
+  }
   return (
     <div className="App">
       <header className="App-header">
+  {/* 渲染基础的上传功能 */}
+  <input type="file" name='myFile' onChange={handleFileChange}/>
+  {/* 渲染我们的Upload组件 */}
+        <Upload action="https://jsonplaceholder.typicode.com/posts" />
   {/* 渲染我们的Input组件 */}
         {/* 1.基础输入框 */}
         <Input  placeholder='请输入'/>
