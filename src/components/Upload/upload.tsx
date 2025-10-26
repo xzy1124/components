@@ -29,6 +29,23 @@ export const Upload: React.FC<UploadProps> = (props) => {
   const fileInputRef = useRef<HTMLInputElement>(null)
     // 使用状态管理文件列表,一开始是空数组,后面上传的文件是个UploadFile类型的对象
     const [fileList, setFileList] = useState<UploadFile[]>([])
+    // 添加一个辅助方法用来以后更新，参数一个是要更新的目标文件，一个是要更新的文件的属性
+    // Partial<UploadFile>是TypeScript的泛型，表示可以只包含UploadFile接口中部分属性的对象，这样可以灵活地只更新需要改变的属性
+    const updateFileList = (updateFile: UploadFile, updateObj: Partial<UploadFile>) => {
+        setFileList((preFileList) => {
+            return preFileList.map(file => {
+                // 根据这个之前的文件的id唯一，我们可以找到要更新的文件，因为之前的文件假如我上传了多个文件，每个文件都有一个唯一的id，
+                // 后面我们怎么知道更新的文件是哪一个呢，就是根据这个文件的id唯一
+                if (file.uid === updateFile.uid) {
+                    // 这是对象展开运算符的用法，后面的属性会覆盖前面同名的属性
+                    return { ...file, ...updateObj }
+                }
+                else {
+                    return file
+                }
+            })
+        })
+    }   
 //   点击按钮的时候触发上传
   const handleFile = () => {
     if(fileInputRef.current){
@@ -100,6 +117,14 @@ const post = (file: File) => {
             if (e.total && e.total > 0) {
                 percent = Math.round((e.loaded * 100) / e.total);
             }
+            // 我们想拿到最新的fileList对象的状态,但是这是个异步更新的过程,如果我们直接打印,会是个空数组
+            // console.log(fileList)
+            updateFileList(_file, { percent: percent, status: 'uploading' })
+            // setFileList((pre) => {
+            //     console.log(pre);
+            //     return pre
+                
+            // })
             onProgress?.(percent, file)
         }
     }).then(res => {
