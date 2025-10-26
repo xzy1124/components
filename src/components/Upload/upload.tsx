@@ -1,7 +1,18 @@
 import React from 'react'
 import axios, { AxiosProgressEvent } from 'axios';
 import Button from '../Button/Button';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+// 定义文件列表数据
+export interface UploadFile {
+    uid: string;
+    size: number;
+    name: string;
+    status?: 'ready' | 'uploading' | 'success' | 'error';
+    percent?: number;
+    raw?: File;
+    response?: any;
+    error?: any;
+}
 export interface UploadProps {
     action: string;
     onProgress?: (percent: number, file:File) => void;
@@ -16,6 +27,8 @@ export const Upload: React.FC<UploadProps> = (props) => {
   const {action, onProgress, onSuccess, onError, beforeUpload, onChange} = props
 //   使用useRef绑定到input元素，获取它的文件
   const fileInputRef = useRef<HTMLInputElement>(null)
+    // 使用状态管理文件列表,一开始是空数组,后面上传的文件是个UploadFile类型的对象
+    const [fileList, setFileList] = useState<UploadFile[]>([])
 //   点击按钮的时候触发上传
   const handleFile = () => {
     if(fileInputRef.current){
@@ -64,6 +77,16 @@ const uploadFiles = (files: FileList) => {
 }
 // 上传文件封装出去
 const post = (file: File) => {
+    // 上传前,创建一个文件对象,放到我们的状态管理里面,后续好检测上传状态
+    let _file: UploadFile = {
+        uid: Date.now() + 'upload-file',
+        size: file.size,
+        name: file.name,
+        status: 'ready',
+        percent: 0,
+        raw: file,
+    }
+    setFileList([_file, ...fileList])
     const formData = new FormData()
     formData.append('file', file)
     axios.post(action, formData, {
@@ -96,6 +119,7 @@ const post = (file: File) => {
         onChange?.(file)
     })
 }
+    console.log(fileList)
   return (
     <div className='viking-upload-component'>
       <Button btnType='primary' onClick={handleFile}>上传文件</Button>
