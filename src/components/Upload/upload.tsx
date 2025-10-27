@@ -25,9 +25,27 @@ export interface UploadProps {
     onChange?: (file: File) => void;
     defaultFileList?: UploadFile[];
     onRemove?: (file: UploadFile) => void;
+        // 数据丰富化处理
+    header?: {[key: string]: any};
+    name?: string;
+    data?: {[key: string]: any};
+    withCredentials?: boolean;
 }
 export const Upload: React.FC<UploadProps> = (props) => {
-    const { action, onProgress, onSuccess, onError, beforeUpload, onChange, defaultFileList, onRemove} = props
+    const { 
+        action, 
+        onProgress, 
+        onSuccess, 
+        onError, 
+        beforeUpload, 
+        onChange, 
+        defaultFileList, 
+        onRemove,
+        header,
+        name = 'file',
+        data,
+        withCredentials,
+    } = props
 //   使用useRef绑定到input元素，获取它的文件
   const fileInputRef = useRef<HTMLInputElement>(null)
     // 使用状态管理文件列表,一开始是空数组,后面上传的文件是个UploadFile类型的对象
@@ -118,11 +136,21 @@ const post = (file: File) => {
     }
     setFileList([_file, ...fileList])
     const formData = new FormData()
-    formData.append('file', file)
+    formData.append(name ||'file', file)
+        // 在这里新增data数据的上传
+        if(data){
+            Object.keys(data).forEach(key => {
+            formData.append(key, data[key])
+            })
+        }
     axios.post(action, formData, {
         headers: {
+            // 把我们自定义的header合并到axios的header里面
+            ...header,
             'Content-Type': 'multipart/form-data'
         },
+        // axios本身就支持的一个配置项，用来处理跨域请求时是否携带cookie
+        withCredentials: withCredentials,
         // axios自带的一个上传进度回调函数
         onUploadProgress: (e: AxiosProgressEvent) => {
             // 明确检查e.total是否存在且大于0

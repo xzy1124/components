@@ -117,6 +117,14 @@ export const Default: Story = {
         // 可以在这里覆盖默认参数
         defaultFileList: defaultFileListData,
         action: 'https://jsonplaceholder.typicode.com/posts',
+            // 这里是新增的http请求数据
+        name: 'my-file',
+        header: {
+            'XZY-Authorization': 'Bearer ziyan-token',
+        },
+        data: {
+            'username': 'xvziyan',
+        },
     },
     parameters: {
         docs: {
