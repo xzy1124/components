@@ -112,7 +112,7 @@ const defaultFileListData: UploadFile[] = [
         size: 20971520, // 20MB
     },
 ];
-// 基本上传故事
+// 基本上传故事    
 export const Default: Story = {
     args: {
         // 可以在这里覆盖默认参数
