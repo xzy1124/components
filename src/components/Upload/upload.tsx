@@ -3,6 +3,7 @@ import axios, { AxiosProgressEvent } from 'axios';
 import Button from '../Button/Button';
 import { useRef, useState } from 'react';
 import UploadList from './uploadList';
+import Dragger from './dragger';
 // 定义文件列表数据
 export interface UploadFile {
     uid: string;
@@ -33,6 +34,9 @@ export interface UploadProps {
         // 数据丰富化处理，添加多文件和类型筛选
     accept?: string;
     multiple?: boolean;
+    children?: React.ReactNode;
+        // 添加拖拽属性
+     drag?: boolean;
 }
 export const Upload: React.FC<UploadProps> = (props) => {
     const { 
@@ -50,6 +54,8 @@ export const Upload: React.FC<UploadProps> = (props) => {
         withCredentials,
         accept,
         multiple,
+        drag,
+        children
     } = props
 //   使用useRef绑定到input元素，获取它的文件
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -119,7 +125,7 @@ const uploadFiles = (files: FileList) => {
     })
 }
     // 这里实现点击取消上传，参数是一个file,类型是我们包装好的一个上传文件的类型UploadFile
-    const handleRemove = (file: UploadFile) => {
+const handleRemove = (file: UploadFile) => {
         // 拿到当前最新的文件列表做处理，做什么处理呢，就是过滤掉要删除的文件，怎么确定过滤的是哪一个文件呢，就是根据文件的uid唯一
         setFileList((preFileList) => {
             return preFileList.filter(f => f.uid !== file.uid)
@@ -199,17 +205,33 @@ const post = (file: File) => {
     console.log(fileList)
   return (
     <div className='viking-upload-component'>
-      <Button btnType='primary' onClick={handleFile}>上传文件</Button>
-      <input 
-        className='viking-file-input'
-        type="file"
-        style={{display: 'none'}}
-        // 监听文件选择变化
-        onChange={handleFileChange}
-        multiple
-        ref={fileInputRef}
-        accept={accept}
-       />
+      {/* <Button btnType='primary' onClick={handleFile}>上传文件</Button> */}
+      {/* 不使用button了我，直接用children来渲染 */}
+      <div className='viking-upload-input'
+            style={{display: 'inline-block'}}
+            onClick={handleFile}
+        >
+            {/* 只要drag属性是true,我就能渲染我写好的一个dragger组件 */}
+            {drag ? 
+            // 谁使用我，谁就能用我传出去的一个回调函数onFile, 在drageer里面我把用户拖拽的文件列表
+            // 传出来了，相当于这里的files,然后我又把它传到uploadFiles函数中，去执行一个一个的上传
+            <Dragger onFile={(files) => {uploadFiles(files)}}>
+                {/* children是为了其他组件在使用upload组件的时候可以自定义的元素dom和内容 */}
+                {children}
+            </Dragger>: 
+            children
+            }
+            <input 
+                className='viking-file-input'
+                type="file"
+                style={{display: 'none'}}
+                // 监听文件选择变化
+                onChange={handleFileChange}
+                multiple
+                ref={fileInputRef}
+                accept={accept}
+            />
+      </div>
        {/* 在这里渲染上传列表的状态 */}
         <UploadList defaultFileList={fileList} onRemove={handleRemove}/>
     </div>

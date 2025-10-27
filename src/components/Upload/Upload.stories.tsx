@@ -3,6 +3,7 @@ import { fn } from 'storybook/test';
 import { Upload } from './upload';
 import { UploadFile } from './upload';
 import uploadList from './uploadList';
+import Icon from '../Icon/icon';
 
 // 定义Meta数据
 export default {
@@ -128,6 +129,7 @@ export const Default: Story = {
         withCredentials: true,
         accept: '.jpg, .png',
         multiple: true,
+        drag: true,
     },
     parameters: {
         docs: {
@@ -136,6 +138,17 @@ export const Default: Story = {
             },
         },
     },
+    render: (args) => {
+        return (
+            <>
+                <Upload {...args} >
+                    <Icon icon="upload" size="5x" theme="secondary" />
+                    <br />
+                    <p>Drag file over to upload</p>
+                </Upload>
+            </>
+        )
+    }
 };
 
 // 带进度跟踪的上传故事
@@ -269,6 +282,27 @@ export const WithOnChangeTracking: Story = {
             <div style={{ marginTop: '20px' }}>
                 <h4>查看Actions面板或控制台，观察onChange调用情况</h4>
             </div>
+        </>
+    ),   
+}
+// 带组件的模板拖拽故事
+export const WithDraggerTemplate: Story = {
+    args: {
+        action: 'https://jsonplaceholder.typicode.com/posts',
+        onChange: fn(),
+        onRemove: fn(),
+        name: 'fileName',
+        drag: true,
+    },
+    render: (args) => (
+        <>
+        {/* 这里渲染一个Upload组件 */}
+            <Upload {...args} >
+                <Icon icon="upload" size="5x" theme="secondary" />
+                <br />
+                <p>Drag file over to upload</p>
+            </Upload>
+
         </>
     ),   
 }
