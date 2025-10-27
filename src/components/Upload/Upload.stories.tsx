@@ -116,6 +116,7 @@ export const Default: Story = {
     args: {
         // 可以在这里覆盖默认参数
         defaultFileList: defaultFileListData,
+        action: 'https://jsonplaceholder.typicode.com/posts',
     },
     parameters: {
         docs: {

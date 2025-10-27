@@ -1,6 +1,7 @@
 import React from 'react'
 import { UploadFile } from './upload'
 import Icon from '../Icon/icon'
+import Progress from '../Progress/Progress'
 interface UploadListProps {
     // 具有两个属性，一是一个文件列表，二是一个删除函数
     defaultFileList: UploadFile[],
@@ -28,6 +29,8 @@ export const UploadList: React.FC<UploadListProps> = (props) => {
                     <span className='file-actions'>
                         <Icon icon="times" theme="danger" onClick={() => onRemove(item)} />
                     </span>
+                    {/* 上传进度条 */}
+                    {item.status === 'uploading' && <Progress percent={item.percent || 0} theme="primary" />}
                 </li>
             ))}
         </ul>
