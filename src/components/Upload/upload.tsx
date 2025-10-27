@@ -2,6 +2,7 @@ import React from 'react'
 import axios, { AxiosProgressEvent } from 'axios';
 import Button from '../Button/Button';
 import { useRef, useState } from 'react';
+import UploadList from './uploadList';
 // 定义文件列表数据
 export interface UploadFile {
     uid: string;
@@ -22,13 +23,15 @@ export interface UploadProps {
     // 如果返回的是异步Promise，会等待Promise resolve后再上传，这个异步promise的类型是File
     beforeUpload?:(file:File) => boolean | Promise<File>;
     onChange?: (file: File) => void;
+    defaultFileList?: UploadFile[];
+    onRemove?: (file: UploadFile) => void;
 }
 export const Upload: React.FC<UploadProps> = (props) => {
-  const {action, onProgress, onSuccess, onError, beforeUpload, onChange} = props
+    const { action, onProgress, onSuccess, onError, beforeUpload, onChange, defaultFileList, onRemove} = props
 //   使用useRef绑定到input元素，获取它的文件
   const fileInputRef = useRef<HTMLInputElement>(null)
     // 使用状态管理文件列表,一开始是空数组,后面上传的文件是个UploadFile类型的对象
-    const [fileList, setFileList] = useState<UploadFile[]>([])
+    const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList || [])
     // 添加一个辅助方法用来以后更新，参数一个是要更新的目标文件，一个是要更新的文件的属性
     // Partial<UploadFile>是TypeScript的泛型，表示可以只包含UploadFile接口中部分属性的对象，这样可以灵活地只更新需要改变的属性
     const updateFileList = (updateFile: UploadFile, updateObj: Partial<UploadFile>) => {
@@ -92,6 +95,16 @@ const uploadFiles = (files: FileList) => {
         }
     })
 }
+    // 这里实现点击取消上传，参数是一个file,类型是我们包装好的一个上传文件的类型UploadFile
+    const handleRemove = (file: UploadFile) => {
+        // 拿到当前最新的文件列表做处理，做什么处理呢，就是过滤掉要删除的文件，怎么确定过滤的是哪一个文件呢，就是根据文件的uid唯一
+        setFileList((preFileList) => {
+            return preFileList.filter(f => f.uid !== file.uid)
+        })
+        // 这里的意思就是如果有onRemove函数，就调用它，把要删除的文件传进去
+        // 相当于if(onRemove){onRemove(file)}
+        onRemove?.(file)
+    }
 // 上传文件封装出去
 const post = (file: File) => {
     // 上传前,创建一个文件对象,放到我们的状态管理里面,后续好检测上传状态
@@ -129,12 +142,14 @@ const post = (file: File) => {
         }
     }).then(res => {
         console.log(res)
+        updateFileList(_file, {status: 'success', response: res.data})
         if (onSuccess) {
             onSuccess(res.data, file)
         }
         // 上传完成后，调用onChange函数，将文件对象传递给父组件
         onChange?.(file)
     }).catch(err => {
+        updateFileList(_file, {status: 'error', error: err})
         if (onError) {
             onError(err, file)
         }
@@ -156,6 +171,8 @@ const post = (file: File) => {
         multiple
         ref={fileInputRef}
        />
+       {/* 在这里渲染上传列表的状态 */}
+        <UploadList defaultFileList={fileList} onRemove={handleRemove}/>
     </div>
   )
 }

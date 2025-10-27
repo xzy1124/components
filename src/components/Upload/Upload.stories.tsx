@@ -1,6 +1,8 @@
 import { Meta, StoryObj } from '@storybook/react-webpack5';
 import { fn } from 'storybook/test';
 import { Upload } from './upload';
+import { UploadFile } from './upload';
+import uploadList from './uploadList';
 
 // 定义Meta数据
 export default {
@@ -70,9 +72,51 @@ export default {
 // 定义Story类型
 type Story = StoryObj<typeof Upload>;
 
+// 默认文件列表数据 - 包含各种状态的文件
+const defaultFileListData: UploadFile[] = [
+    {
+        uid: '1',
+        name: 'document.pdf',
+        status: 'success',
+        percent: 100,
+        size: 2097152, // 2MB
+    },
+    {
+        uid: '2',
+        name: 'image.jpg',
+        status: 'error',
+        percent: 0,
+        size: 1048576, // 1MB
+        error: '上传失败，请重试',
+    },
+    {
+        uid: '3',
+        name: 'video.mp4',
+        status: 'uploading',
+        percent: 65,
+        size: 10485760, // 10MB
+    },
+    {
+        uid: '4',
+        name: 'presentation.pptx',
+        status: 'ready',
+        percent: 0,
+        size: 5242880, // 5MB
+    },
+    {
+        uid: '5',
+        name: 'archive.zip',
+        status: 'success',
+        percent: 100,
+        size: 20971520, // 20MB
+    },
+];
 // 基本上传故事
 export const Default: Story = {
-    args: {},
+    args: {
+        // 可以在这里覆盖默认参数
+        defaultFileList: defaultFileListData,
+    },
     parameters: {
         docs: {
             description: {
