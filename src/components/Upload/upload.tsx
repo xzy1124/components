@@ -25,11 +25,14 @@ export interface UploadProps {
     onChange?: (file: File) => void;
     defaultFileList?: UploadFile[];
     onRemove?: (file: UploadFile) => void;
-        // 数据丰富化处理
+        // 数据丰富化处理http
     header?: {[key: string]: any};
     name?: string;
     data?: {[key: string]: any};
     withCredentials?: boolean;
+        // 数据丰富化处理，添加多文件和类型筛选
+    accept?: string;
+    multiple?: boolean;
 }
 export const Upload: React.FC<UploadProps> = (props) => {
     const { 
@@ -45,6 +48,8 @@ export const Upload: React.FC<UploadProps> = (props) => {
         name = 'file',
         data,
         withCredentials,
+        accept,
+        multiple,
     } = props
 //   使用useRef绑定到input元素，获取它的文件
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -134,7 +139,11 @@ const post = (file: File) => {
         percent: 0,
         raw: file,
     }
-    setFileList([_file, ...fileList])
+    // setFileList([_file, ...fileList])
+    // 这里我们之前只是把新的文件存到状态管理里面，但是上传是异步的，拿不到最新的文件
+    setFileList((preFileList) => {
+        return [_file, ...preFileList]
+    })
     const formData = new FormData()
     formData.append(name ||'file', file)
         // 在这里新增data数据的上传
@@ -192,12 +201,14 @@ const post = (file: File) => {
     <div className='viking-upload-component'>
       <Button btnType='primary' onClick={handleFile}>上传文件</Button>
       <input 
+        className='viking-file-input'
         type="file"
         style={{display: 'none'}}
         // 监听文件选择变化
         onChange={handleFileChange}
         multiple
         ref={fileInputRef}
+        accept={accept}
        />
        {/* 在这里渲染上传列表的状态 */}
         <UploadList defaultFileList={fileList} onRemove={handleRemove}/>

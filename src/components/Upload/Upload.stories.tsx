@@ -125,6 +125,9 @@ export const Default: Story = {
         data: {
             'username': 'xvziyan',
         },
+        withCredentials: true,
+        accept: '.jpg, .png',
+        multiple: true,
     },
     parameters: {
         docs: {
