@@ -1,10 +1,11 @@
+// 使用了React.ChangeEvent等React的类型，是需要显式导入React的
+import React, {useState} from 'react'
 import Button, {ButtonType, ButtonSize} from './components/Button/Button'
 import Alert, {AlertType} from './components/Alert/Alert'
 import Menu from './components/Menu/Menu'
 import MenuItem from './components/Menu/MenuItem'
 import Icon from './components/Icon/icon'
 import Input from './components/Input/input'
-import {useState} from 'react'
 import axios from 'axios'
 import SubMenu from './components/Menu/subMenu'
 import Upload from './components/Upload/upload'
