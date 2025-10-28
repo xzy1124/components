@@ -1,3 +1,5 @@
+@use 'sass:math';
+@use 'sass:color';
 @mixin button-size($padding-y, $padding-x, $font-size, $border-raduis) {
   padding: $padding-y $padding-x;
   font-size: $font-size;
@@ -9,8 +11,8 @@
   $border,
   $color,
   // 比现在的颜色显色(这里是浅)7.5%
-  $hover-background: lighten($background, 7.5%),
-  $hover-border: lighten($border, 10%),
+  $hover-background: color.adjust($background, $lightness: 7.5%),
+  $hover-border: color.adjust($border, $lightness: 10%),
   $hover-color: $color,
 ) {
   color: $color;

@@ -1,3 +1,5 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixin" as *;
 // 定义输入框的最外层容器样式
 .viking-input-wrapper {
     display: flex;

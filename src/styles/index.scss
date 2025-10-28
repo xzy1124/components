@@ -1,35 +1,21 @@
+// 在Dart Sass 3.0.0中，@import规则弃用改用了@use和@forward
 // config
-@import "variables";
+// 引入Sass核心模块
+@use "sass:math";
+@use "sass:color";
 
-//layout
-@import "reboot";
+// 引入基础配置和工具
+@use "./variables" as *;
+@use "./reboot" as *;
+@use "./mixin" as *;
+@use "./animate.scss" as *;
 
-// mixin
-@import "mixin";
-
-// animation
-@import "./animate.scss";
-
-// button
-@import "../components/Button/styles.scss";
-
-//Alert
-@import "../components/Alert/styles.scss";
-
-// menu
-@import "../components/Menu/styles.scss";
-
-// icon
-@import "../components/Icon/styles.scss";
-
-//input
-@import "../components/Input/styles.scss";
-
-//auto-complete
-@import "../components/AutoComplete/styles.scss";
-
-//upload
-@import "../components/Upload/styles.scss";
-
-//progress
-@import "../components/Progress/styles.scss";
+// 引入组件样式
+@use "../components/Button/styles.scss" as *;
+@use "../components/Alert/styles.scss" as *;
+@use "../components/Menu/styles.scss" as *;
+@use "../components/Icon/styles.scss" as *;
+@use "../components/Input/styles.scss" as *;
+@use "../components/AutoComplete/styles.scss" as *;
+@use "../components/Upload/styles.scss" as *;
+@use "../components/Progress/styles.scss" as *;

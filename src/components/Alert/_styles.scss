@@ -1,5 +1,6 @@
 // 引入变量
-
+@use "../../styles/variables" as *;
+@use "../../styles/mixin" as *;
 // 基础Alert样式
 .alert {
     position: relative;

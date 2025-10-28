@@ -1,3 +1,5 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixin" as *;
 .item-highlighted {
     background: $primary;
     color: $white

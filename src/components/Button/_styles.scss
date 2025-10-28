@@ -1,3 +1,6 @@
+// 由于Dart Sass的模块化特性，用什么这里还是需要显式导入
+@use "../../styles/variables" as *;
+@use "../../styles/mixin" as *;
 .btn {
     position: relative;
     display: inline-block;

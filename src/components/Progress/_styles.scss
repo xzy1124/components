@@ -1,3 +1,5 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixin" as *;
 .viking-progress-bar {
   width: 100%;
   box-sizing: border-box;
