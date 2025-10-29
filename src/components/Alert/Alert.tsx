@@ -8,10 +8,10 @@ export type AlertType =
     | 'danger'
 
 interface AlertProps {
-    title: string,
-    description: string,  
+    title?: string,
+    description?: string,  
     // 点击关闭触发的事件
-    onClose: () => void,
+    onClose?: () => void,
     // 是否显示关闭按钮
     closable?: boolean,  // 修改为可选的布尔类型
     type: AlertType,
@@ -29,12 +29,12 @@ const Alert: React.FC<AlertProps> = ({ title, description, onClose, closable, ty
             {title && <h4 className="alert-title">{title}</h4>}
             {description && <p className="alert-description">{description}</p>}
             {children}
-            {closable && (
+            {(closable && onClose) && (
                 <button
                     className="alert-close"
                     onClick={(e) => {
                         e.stopPropagation();  // 阻止事件冒泡到父级div
-                        onClose();
+                        onClose?.();  // 调用可选的onClose函数
                     }}
                 >
                     <Icon theme="primary" icon="times" size="1x" />
