@@ -1,3 +1,8 @@
+// 还有图标专门以来的libraray
+import {library} from '@fortawesome/fontawesome-svg-core'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+library.add(fas)
+
 // 实现一系列组件的导出
 export {default as Button} from './components/Button'
 export {default as Menu} from './components/Menu'

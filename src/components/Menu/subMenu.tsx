@@ -40,7 +40,8 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
 
     // 定义回调函数，点击时触发
     const handleClick = (e: React.MouseEvent) => {
-        e.preventDefault()
+        e.preventDefault() 
+        e.stopPropagation() //阻止事件冒泡，防止点击子菜单时触发父菜单的点击事件
         setIsOpen(!isOpen)
     }
     // 现在我们通过拿到的mode来创建鼠标触发的时候根据水平就触发，垂直就不变
