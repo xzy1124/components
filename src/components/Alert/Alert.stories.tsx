@@ -200,7 +200,9 @@ export const ClosableAlert: Story = {
         // 实现真正的onClose函数，更新状态使组件消失
         const handleClose = () => {
             // 调用原始的onClose action记录事件
-            args.onClose();
+            if(args.onClose){
+                args.onClose();
+            }
             // 更新状态，使组件从DOM中移除
             setVisible(false);
         };

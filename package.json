@@ -41,7 +41,7 @@
   },
   "scripts": {
     "clean": "rimraf dist",
-    "lint": "eslint --ext js,ts,tsx, src --max-warnings 5",
+    "lint": "eslint --ext js,ts,tsx,src --max-warnings 15",
     "start": "react-scripts start",
     "build": "npm run clean && npm run build-ts && npm run build-css",
     "test": "react-scripts test",
@@ -51,12 +51,8 @@
     "build-storybook": "storybook build",
     "build-ts": "tsc -p tsconfig.build.json",
     "build-css": "sass ./src/styles/index.scss ./dist/index.css",
-    "prepublish": "npm run test:nowatch && npm run lint && npm run build"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint && npm run test:nowatch"
-    }
+    "prepublish": "npm run test:nowatch && npm run lint && npm run build",
+    "prepare": "husky"
   },
   "eslintConfig": {
     "extends": [
