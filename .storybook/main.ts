@@ -15,7 +15,7 @@ const config: StorybookConfig = {
     options: {}
   },
   staticDirs: [
-    "..public"
+    "../public"
   ],
   // 使用 react-docgen-typescript 来解析 TS 源码的 props 和 JSDoc
   typescript: {
