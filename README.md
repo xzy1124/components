@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-green) ![Storybook](https://img.shields.io/badge/storybook-9-orange) ![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue)
 
-**my-design** 是一套基于 **React 18 + TypeScript** 的高质量前端组件库，提供丰富的 UI 组件和交互体验，适用于各种 Web 应用开发场景。
+**my-design** 是一套基于 **React 18 + TypeScript** 的高质量前端组件库，提供丰富的 UI 组件和交互体验，适用于各种 Web 应用开发场景。线上展示：https://xzy1124.github.io/components/?path=/docs/configure-your-project--docs
 
 ---
 
